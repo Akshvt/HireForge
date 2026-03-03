@@ -28,7 +28,7 @@
 
 ## 🧭 Executive Summary
 
-JobTune v2.0 is a **complete overhaul** of the existing AI Resume Analyzer. We are transforming it from a simple resume-upload-and-score tool into a **full-fledged career optimization platform** that rivals — and exceeds — what ResumeWorded offers behind a paywall. Our users get **everything for free**: deep resume scoring across 20+ parameters, AI-powered resume rewriting, job-description targeting, LinkedIn profile optimization tips, resume version history, and a personalized career dashboard.
+JobTune v2.0 is a **complete overhaul** of the existing AI Resume Analyzer. We are transforming it from a simple resume-upload-and-score tool into a **full-fledged career optimization platform** that rivals — and exceeds — what ResumeWorded offers behind a paywall. Our users get **everything for free**: deep resume scoring across 20+ parameters, AI-powered resume rewriting, job-description targeting, resume version history, and a personalized career dashboard.
 
 The backend is being **migrated from Python (FastAPI) to Node.js (Express)**, giving us a unified JavaScript/TypeScript stack across both frontend and backend. The frontend stays on **React + Vite + TypeScript + Tailwind CSS + shadcn/ui** but receives a massive UI/UX overhaul with new pages, authentication, dashboard, and premium design.
 
@@ -52,8 +52,7 @@ JobTune exists under the **CodeSage** umbrella brand. CodeSage is our AI-powered
 
 1. **Resume Upload** — PDF/DOC/DOCX upload with text extraction
 2. **ATS Score** — Basic scoring on 5 parameters (skills count, resume length, action verbs, experience years, formatting) — scores clamped between 65–95
-3. **Job Recommendations** — CSV-based matching using skill overlap, generates LinkedIn/Naukri search links
-4. **Career Path** — Hardcoded career paths (10 roles) with skill gap analysis and learning resource links
+3. **Job Recommendations** — CSV-based matching using skill overlap, generates search links
 5. **AI Rewriting** — Uses `google/flan-t5-base` via HuggingFace Transformers to rewrite individual resume bullets
 
 ### Current Weaknesses
@@ -64,7 +63,7 @@ JobTune exists under the **CodeSage** umbrella brand. CodeSage is our AI-powered
 - **No job description targeting** — can't compare resume against a specific JD
 - **Hardcoded skill database** — only 15 skills recognized
 - **No resume version history** — users can't track improvements
-- **No LinkedIn optimization** — missing entirely
+
 - **Basic UI** — functional but not premium; no landing page, no about page
 - **Python backend** — works but creates a split-stack (Python + JS)
 - **No database** — everything is ephemeral
@@ -81,19 +80,16 @@ JobTune exists under the **CodeSage** umbrella brand. CodeSage is our AI-powered
 | Detailed line-by-line feedback | **Premium ($29/mo)** | ✅ **Free** |
 | Targeted Resume (match to JD) | **Premium** | ✅ **Free** |
 | AI Resume Rewriting | **Premium** | ✅ **Free** |
-| LinkedIn Profile Review | **Premium** | ✅ **Free** |
 | Resume Samples/Templates | **Premium** | ✅ **Free** |
 | Resume History & Tracking | **Premium** | ✅ **Free** |
-| Career Path Guidance | Not offered | ✅ **Free** (our unique feature) |
 | Job Matching | Not offered | ✅ **Free** (our unique feature) |
 
 ### Our Unique Additions Beyond ResumeWorded
 
 1. **CodeSage Integration** — developers can link their code review profile to showcase coding quality
 2. **Job Matching Engine** — not just scoring, but actually finding and ranking jobs
-3. **Career Path Visualization** — interactive career roadmaps with skill gap analysis
-4. **Multi-format Export** — export improved resumes as PDF, DOCX
-5. **Community Features** — share anonymized resume scores (future roadmap)
+3. **Multi-format Export** — export improved resumes as PDF, DOCX
+4. **Community Features** — share anonymized resume scores (future roadmap)
 
 ---
 
@@ -139,17 +135,13 @@ backend/
 │   │   ├── resume.routes.ts     # Upload, Parse, History
 │   │   ├── ats.routes.ts        # Scoring, Feedback
 │   │   ├── job.routes.ts        # Job matching
-│   │   ├── career.routes.ts     # Career path
-│   │   ├── ai.routes.ts         # AI rewriting, targeting
-│   │   └── linkedin.routes.ts   # LinkedIn optimization
+│   │   └── ai.routes.ts         # AI rewriting, targeting
 │   ├── services/
 │   │   ├── resumeParser.ts      # PDF/DOCX text extraction
 │   │   ├── atsScorer.ts         # Multi-parameter ATS scoring
 │   │   ├── jobMatcher.ts        # Job recommendation engine
-│   │   ├── careerRecommender.ts # Career path logic
 │   │   ├── aiRewriter.ts        # AI resume bullet rewriter
 │   │   ├── jdTargeter.ts        # Job description targeting
-│   │   ├── linkedinOptimizer.ts # LinkedIn profile tips
 │   │   ├── pdfExporter.ts       # PDF generation
 │   │   └── emailService.ts      # Email notifications
 │   ├── utils/
@@ -289,42 +281,21 @@ ResumeWorded charges $29/month for this. We offer it **free**.
 
 ---
 
-### Feature F6: LinkedIn Profile Optimization
-**Priority:** 🟡 High  
-**Owner:** Akshat & Anant
-
-- User pastes their LinkedIn profile text (headline, about, experience)
-- Scores the profile on: headline strength, about section, keyword density, recommendation count tip
-- Provides specific improvement suggestions
-- Generates optimized headline and about section alternatives
-
----
-
-### Feature F7: Job Matching Engine (Enhanced)
+### Feature F6: Job Matching Engine (Enhanced)
 **Priority:** 🟡 High  
 **Owner:** Akshat & Anant
 
 - Move from CSV to **MongoDB-based job collection**
 - Match jobs based on: skills overlap, experience level, location preference, salary range
-- Generate direct application links (LinkedIn, Naukri, Indeed)
+- Generate direct application links (Naukri, Indeed)
 - Filter by: job type (internship/full-time), location, remote/hybrid/onsite
 - Sort by: match score, date posted, company rating
 
 ---
 
-### Feature F8: Career Path Visualization
-**Priority:** 🟢 Medium  
-**Owner:** Akshat & Anant (backend logic) + **Mahek** (frontend visualization component)
-
-- Interactive career roadmap visualization (timeline/flowchart style)
-- Show current position → next steps → long-term goals
-- Skill gap analysis with learning resource links
-- Salary benchmarking data (indicative ranges)
-- Expand from 10 to **30+ career paths**
-
 ---
 
-### Feature F9: User Dashboard
+### Feature F7: User Dashboard
 **Priority:** 🔴 Critical  
 **Owner:** Akshat & Anant (structure + data sections) + **Mahek** (info/about section within dashboard)
 
@@ -335,13 +306,13 @@ The dashboard is the **central hub** after login:
 2. **Quick Stats Cards** — latest ATS score, resumes uploaded, jobs matched, profile completeness
 3. **Resume Score History** — chart showing score improvement over time (line/area chart)
 4. **Recent Activity Feed** — last 5 actions (uploads, analyses, rewrites)
-5. **Quick Actions** — upload resume, target a JD, optimize LinkedIn, view career path
+5. **Quick Actions** — upload resume, target a JD
 6. **Info Section** — tips, articles, career advice (Mahek's section)
 7. **CodeSage Integration Widget** — link to CodeSage profile, combined score
 
 ---
 
-### Feature F10: Landing Page (Redesigned)
+### Feature F8: Landing Page (Redesigned)
 **Priority:** 🔴 Critical  
 **Owner:** Akshat & Anant (hero, features, CTA sections) + **Mahek** (testimonials, about brand, info blocks)
 
@@ -358,7 +329,7 @@ Premium landing page inspired by ResumeWorded but with our own brand identity:
 
 ---
 
-### Feature F11: About / Information Pages
+### Feature F9: About / Information Pages
 **Priority:** 🟡 High  
 **Owner:** **Mahek** (primary owner)
 
@@ -381,7 +352,7 @@ These pages tell our story and connect JobTune to CodeSage:
 │  React + Vite + TypeScript + Tailwind + shadcn/ui + Zustand │
 │                                                              │
 │  Pages: Landing | Login | Register | Dashboard | Upload      │
-│         Score | Target | LinkedIn | Career | About | FAQ     │
+│         Score | Target | About | FAQ                         │
 └──────────────────────────┬──────────────────────────────────┘
                            │ REST API (JSON)
                            ▼
@@ -392,8 +363,8 @@ These pages tell our story and connect JobTune to CodeSage:
 │  JWT       pdf-parse         20+ params     Gemini API       │
 │            mammoth                                           │
 │                                                              │
-│  Job Matcher ──► Career Engine ──► LinkedIn Optimizer        │
-│  MongoDB         30+ paths         Profile analysis          │
+│  Job Matcher                                                 │
+│  MongoDB                                                     │
 │                                                              │
 │  Middleware: auth │ rateLimiter │ errorHandler │ upload       │
 └──────────────────────────┬──────────────────────────────────┘
@@ -462,45 +433,34 @@ These pages tell our story and connect JobTune to CodeSage:
 - "Auto-tailor my resume" button
 - Download tailored version
 
-### Page 8: LinkedIn Optimizer (`/linkedin`) — Protected (Future... Most likely not)
-- Text input for LinkedIn headline, about, experience
-- Scoring on multiple LinkedIn-specific parameters
-- AI-generated improved versions
-- Tips sidebar
 
-### Page 9: Career Path (`/career`) — Protected
-- Interactive career roadmap (visual flowchart)
-- Skill gap analysis
-- Learning resources per missing skill
-- Role descriptions and salary ranges
-
-### Page 10: Job Matches (`/jobs`) — Protected
+### Page 8: Job Matches (`/jobs`) — Protected
 - Filtered job listings
 - Match score per job
 - Direct apply links
 - Filter sidebar (type, location, remote/onsite)
 
-### Page 11: About Page (`/about`) — Public
+### Page 9: About Page (`/about`) — Public
 - Team section with photos/bios
 - Mission & vision
 - CodeSage ecosystem explanation
 - How JobTune connects with CodeSage
 
-### Page 12: How It Works (`/how-it-works`) — Public
+### Page 10: How It Works (`/how-it-works`) — Public
 - Step-by-step feature walkthrough
 - Animated illustrations
 - Feature comparison with competitors
 
-### Page 13: FAQ (`/faq`) — Public
+### Page 11: FAQ (`/faq`) — Public
 - Accordion-style Q&A
 - Categories: General, ATS, Resume Tips, Technical
 
-### Page 14: Contact (`/contact`) — Public
+### Page 12: Contact (`/contact`) — Public
 - Contact form (name, email, message)
 - Social media links
 - Response time expectations
 
-### Page 15: Profile Settings (`/settings`) — Protected
+### Page 13: Profile Settings (`/settings`) — Protected
 - Edit name, email, avatar
 - Change password
 - Career preferences
@@ -563,18 +523,15 @@ Akshat and Anant handle the **heavy lifting**: backend migration, core features,
 | B5 | **JD Targeting Service** | Parse job descriptions, keyword extraction, match scoring, gap analysis, suggestions | 🟡 | 6 |
 | B6 | **AI Rewriter Service** | Gemini API integration, bullet rewriting, full section rewriting, tone options | 🟡 | 5 |
 | B7 | **Job Matching Engine** | MongoDB job collection, skill-based matching, filtering, sorting, link generation | 🟡 | 5 |
-| B8 | **Career Recommender** | Expand to 30+ paths, skill gap logic, learning resources, salary data | 🟢 | 4 |
-| B9 | **LinkedIn Optimizer** | Profile text analysis, headline scoring, keyword density, AI suggestions | 🟡 | 4 |
-| B10 | **PDF Export** | Generate improved resume as downloadable PDF using PDFKit | 🟢 | 3 |
-| B11 | **Resume History** | Version tracking, diff between versions, score trends | 🟢 | 3 |
-| B12 | **Rate Limiting & Security** | Rate limiter, input sanitization, CORS config, Helmet security headers | 🟢 | 2 |
+| B8 | **PDF Export** | Generate improved resume as downloadable PDF using PDFKit | 🟢 | 3 |
+| B9 | **Resume History** | Version tracking, diff between versions, score trends | 🟢 | 3 |
+| B10 | **Rate Limiting & Security** | Rate limiter, input sanitization, CORS config, Helmet security headers | 🟢 | 2 |
 
 
 #### Frontend Tasks (Akshat & Anant)
 
 | # | Task | Description | Priority | Est. Hours |
 |---|------|-------------|----------|------------|
-
 | F1 | **ATS Score Page** | Animated circular gauge, 5 category breakdowns, expandable parameter details, line feedback with colors | 🔴 | 8 |
 | F2 | **JD Targeting Page** | Two-panel layout, JD input area, match score display, keyword highlighting, auto-tailor button | 🟡 | 6 |
 | F3 | **AI Rewriter UI** | Before/after comparison panels, tone selector, rewrite buttons per line/section | 🟡 | 5 |
@@ -586,7 +543,7 @@ Akshat and Anant handle the **heavy lifting**: backend migration, core features,
 | F9 | **State Management** | Zustand store for auth, user data, resume state; React Query for API calls | 🔴 | 3 |
 | F10 | **API Service Layer** | Axios/fetch wrapper, interceptors for JWT, error handling, TypeScript types | 🔴 | 3 |
 
-**Frontend Total: ~67 hours**
+
 
 ---
 
@@ -609,7 +566,7 @@ Mahek is responsible for all **informational pages**, **content sections**, the 
 | M6 | **Terms of Service Page** | Usage terms, acceptable use, intellectual property, disclaimers, limitation of liability | 🟡 | 3 |
 | M7 | **Landing Page Sections** | Design and build: testimonials section (create 4-6 realistic testimonials), brand/ecosystem section ("Part of CodeSage Suite"), social proof bar | 🔴 | 5 |
 | M8 | **Dashboard Info Section** | Career tips widget, "Did You Know?" cards, rotating career advice, links to blog/resources, motivational stats | 🟡 | 4 |
-| M9 | **Career Path Visualization** | Interactive career roadmap component (visual flowchart/timeline). Take data from API and render it as an engaging visual journey, NOT just a list | 🟡 | 6 |
+
 | M10 | **Footer Component** | Shared footer across all pages: product links (JobTune, CodeSage), social icons, newsletter signup placeholder, copyright, quick links | 🟢 | 2 |
 | M11 | **Error & Empty States** | Design and build: 404 page, empty dashboard state, no results state, error boundary UI — all should feel on-brand and not jarring | 🟢 | 3 |
 | M12 | **Loading & Skeleton States** | Implement skeleton loading screens for: dashboard, score page, job matches — smooth shimmer animations | 🟢 | 2 |
@@ -620,11 +577,10 @@ Mahek is responsible for all **informational pages**, **content sections**, the 
 
 ## 📅 Sprint Plan & Timeline
 
-### Sprint 1: Foundation (Week 1-2)
+### Sprint 1: Foundation 
 **Goal:** Backend is set up, auth works, resume upload works. Frontend has auth pages and basic layout.
-
 | Task | Owner | 
-|------|-------|-------------|
+|------|-------|
 | B1: Node.js project setup + MongoDB | Akshat & Anant 
 | B2: Auth system (register, login, JWT) | Akshat & Anant
 | B3: Resume upload + parsing | Akshat & Anant 
@@ -637,11 +593,10 @@ Mahek is responsible for all **informational pages**, **content sections**, the 
 | M10: Footer component | Mahek 
 | M13: CodeSage branding elements 
 
-### Sprint 2: Core Features (Week 3-4)
+### Sprint 2: Core Features 
 **Goal:** ATS scoring, dashboard, landing page, and info pages are functional.
-
 | Task | Owner 
-|------|-------|-------------|
+|------|-------|
 | B4: ATS scoring engine (20+ params) | Akshat & Anant 
 | F2: Dashboard page | Akshat & Anant 
 | F3: Resume upload component | Akshat & Anant 
@@ -652,35 +607,32 @@ Mahek is responsible for all **informational pages**, **content sections**, the 
 | M7: Landing page sections (testimonials, brand) | Mahek 
 | M8: Dashboard info section | Mahek 
 
-### Sprint 3: Advanced Features (Week 5-6)
-**Goal:** JD targeting, AI rewriting, job matching, LinkedIn optimizer.
-
+### Sprint 3: Advanced Features 
+**Goal:** JD targeting, AI rewriting, job matching.
 | Task | Owner 
-|------|-------|-------------|
+|------|-------|
 | B5: JD targeting service | Akshat & Anant 
 | B6: AI rewriter service | Akshat & Anant 
 | B7: Job matching engine | Akshat & Anant
-| B9: LinkedIn optimizer | Akshat & Anant
 | F5: JD targeting page | Akshat & Anant 
 | F6: AI rewriter UI | Akshat & Anant 
-| F7: Job matches page | Akshat & Anant 
-| F8: LinkedIn optimizer page | Akshat & Anant
+| F7: Job matches page | Akshat & Anant
 | M4: Contact page | Mahek 
 | M5: Privacy Policy page | Mahek 
 | M6: Terms of Service page | Mahek 
-| M9: Career path visualization | Mahek 
+
 | M11: Error & empty states | Mahek 
 | M12: Loading skeletons | Mahek 
 
-### Sprint 4: Polish & Deploy (Week 7)
+### Sprint 4: Polish & Deploy
 **Goal:** Testing, bug fixes, performance, deployment.
 
 | Task | Owner |
 |------|-------|
-| B8: Career recommender expansion | Akshat & Anant |
-| B10: PDF export | Akshat & Anant |
-| B11: Resume history | Akshat & Anant |
-| B12: Rate limiting & security | Akshat & Anant |
+
+| B8: PDF export | Akshat & Anant |
+| B9: Resume history | Akshat & Anant |
+| B10: Rate limiting & security | Akshat & Anant |
 | F9: Profile settings page | Akshat & Anant |
 | Integration testing | All |
 | Bug fixes & polish | All |
@@ -723,10 +675,7 @@ Mahek is responsible for all **informational pages**, **content sections**, the 
 | POST | `/api/jobs/match` | Get job recommendations for a resume | ✅ |
 | GET | `/api/jobs/filters` | Get available filter options | ✅ |
 
-### Career Routes (`/api/career`)
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|--------------|
-| POST | `/api/career/recommend` | Get career path recommendations | ✅ |
+
 
 ### AI Routes (`/api/ai`)
 | Method | Endpoint | Description | Auth Required |
@@ -861,7 +810,7 @@ Mahek is responsible for all **informational pages**, **content sections**, the 
 
 - Your pages are **content-heavy** — invest time in writing quality copy.
 - The About page is your showcase — make the CodeSage connection feel natural, not forced.
-- For the Career Path visualization, look at libraries like `react-flow` or even a custom SVG approach.
+
 - Your FAQ content should be **genuinely helpful**. Research common resume/ATS questions and write thorough answers.
 - The testimonials on the landing page should feel realistic — use names, roles, and specific outcomes.
 - For the Dashboard Info Section, think of it as a "career tips feed" that updates daily (can be hardcoded initially).

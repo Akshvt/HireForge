@@ -2,7 +2,7 @@
 
 > **Part of the [CodeSage](https://github.com/codesage) Suite** — *CodeSage reviews your code. JobTune reviews your career.*
 
-An AI-powered career optimization platform that analyzes resumes, calculates ATS scores across 20+ parameters, provides AI-powered resume rewriting, JD targeting, LinkedIn profile optimization, job matching, and personalized career path recommendations — **all for free**.
+An AI-powered career optimization platform that analyzes resumes, calculates ATS scores across 20+ parameters, provides AI-powered resume rewriting, JD targeting, and job matching — **all for free**.
 
 Built with **Node.js + Express** (backend) and **React + Vite + TypeScript + Tailwind + shadcn/ui** (frontend).
 
@@ -14,9 +14,7 @@ Built with **Node.js + Express** (backend) and **React + Vite + TypeScript + Tai
 - 🎯 **ATS Score Analysis** — 20+ parameters across 5 categories (Impact, Skills, Structure, Experience, ATS Compatibility)
 - � **Targeted Resume** — paste a job description, get a match score + missing keywords + auto-tailored resume
 - 🧠 **AI Resume Rewriting** — rewrite bullets/sections with strong action verbs, quantifiable impact, and multiple tone options
-- 🔗 **LinkedIn Profile Optimization** — score your headline, about, and experience; get AI-generated improvements
-- 💼 **Job Matching Engine** — skill-based job recommendations with direct LinkedIn & Naukri apply links
-- 📈 **Career Path Visualization** — interactive career roadmaps with skill gap analysis and learning resources
+- 💼 **Job Matching Engine** — skill-based job recommendations with direct apply links
 - 🔐 **Authentication** — JWT-based login/register with secure password hashing
 - 📊 **Dashboard** — score history charts, recent activity, quick actions, career tips
 - 📥 **PDF Export** — download your improved resume as a formatted PDF
@@ -35,7 +33,7 @@ JobTune/
 │   │   ├── middleware/        # Auth, upload, error handling, rate limiting
 │   │   ├── models/            # Mongoose schemas (User, Resume, Analysis)
 │   │   ├── routes/            # Express route handlers
-│   │   ├── services/          # Business logic (ATS, AI, jobs, career)
+│   │   ├── services/          # Business logic (ATS, AI, jobs)
 │   │   ├── utils/             # Skills DB, action verbs, helpers
 │   │   └── app.ts             # Express app entry point
 │   ├── package.json
@@ -172,8 +170,7 @@ http://localhost:5173
 | POST | `/api/ai/rewrite` | AI rewrite a bullet/section |
 | POST | `/api/ai/target` | Target resume to a JD |
 | POST | `/api/jobs/match` | Get job recommendations |
-| POST | `/api/career/recommend` | Get career path suggestions |
-| POST | `/api/linkedin/optimize` | Optimize LinkedIn profile |
+
 
 ---
 
@@ -207,9 +204,7 @@ JobTune is part of the **CodeSage** ecosystem:
 - [ ] 20+ parameter ATS scoring
 - [ ] JD targeting & keyword analysis
 - [ ] AI resume rewriting (Gemini)
-- [ ] LinkedIn profile optimization
 - [ ] User dashboard with score history
-- [ ] Career path visualization
 - [ ] PDF export
 - [ ] Resume version tracking
 - [ ] Google OAuth login
