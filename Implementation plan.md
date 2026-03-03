@@ -28,11 +28,11 @@
 
 ## 🧭 Executive Summary
 
-JobTune v2.0 is a **complete overhaul** of the existing AI Resume Analyzer. We are transforming it from a simple resume-upload-and-score tool into a **full-fledged career optimization platform** that rivals — and exceeds — what ResumeWorded offers behind a paywall. Our users get **everything for free**: deep resume scoring across 20+ parameters, AI-powered resume rewriting, job-description targeting, resume version history, and a personalized career dashboard.
+HireForge is a **complete overhaul** of the existing AI Resume Analyzer. We are transforming it from a simple resume-upload-and-score tool into a **full-fledged career optimization platform** that rivals — and exceeds — what ResumeWorded offers behind a paywall. Our users get **everything for free**: deep resume scoring across 20+ parameters, AI-powered resume rewriting, job-description targeting, resume version history, and a personalized career dashboard.
 
 The backend is being **migrated from Python (FastAPI) to Node.js (Express)**, giving us a unified JavaScript/TypeScript stack across both frontend and backend. The frontend stays on **React + Vite + TypeScript + Tailwind CSS + shadcn/ui** but receives a massive UI/UX overhaul with new pages, authentication, dashboard, and premium design.
 
-JobTune exists under the **CodeSage** umbrella brand. CodeSage is our AI-powered code reviewer; JobTune is the career-focused sibling. Together, they form the **CodeSage Suite** — tools that help developers write better code AND land better jobs.
+**HireForge** & **CodeSage** exist under the same umbrella brand. CodeSage is our AI-powered code reviewer; HireForge is the career-focused sibling. Together, they form the **DevToolkit Suite**(Yet to be named) — tools that help developers write better code AND land better jobs.
 
 ---
 
