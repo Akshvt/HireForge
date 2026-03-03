@@ -1,0 +1,69 @@
+################################
+# 🔹 Python (Backend)
+################################
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtual environments
+.env
+.venv
+venv/
+ENV/
+
+# Python build artifacts
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Logs
+*.log
+
+################################
+# 🔹 FastAPI / Runtime
+################################
+uploads/
+*.pdf
+
+################################
+# 🔹 Node / Frontend
+################################
+node_modules/
+dist/
+build/
+
+# Vite / React cache
+.vite/
+.eslintcache
+
+################################
+# 🔹 Lovable leftovers
+################################
+frontend1/
+lovable*
+*lovable*
+
+################################
+# 🔹 OS / Editor junk
+################################
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+
+################################
+# 🔹 Env files (important)
+################################
+.env.local
+.env.production
+.env.development
+
+################################
+# 🔹 Tests / Coverage
+################################
+coverage/
+.pytest_cache/
