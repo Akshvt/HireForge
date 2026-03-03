@@ -1,6 +1,6 @@
-# 📋 JobTune v2.0 — Complete Implementation Plan
+# 📋 HireForge — Complete Implementation Plan
 
-> **Project:** JobTune — AI Resume Analyzer & Career Platform  
+> **Project:** HireForge — AI Resume Analyzer & Career Platform  
 > **Inspiration:** [ResumeWorded.com](https://resumeworded.com) (we provide their premium features **for free**)  
 > **Parent Brand:** CodeSage (Code Reviewer) — same domain ecosystem   
 
