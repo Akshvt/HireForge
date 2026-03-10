@@ -10,8 +10,15 @@ export interface ATSLineFeedback {
   improved_example: string;
 }
 
+export interface DetailedScore {
+  category: string;
+  score: number;
+  subParameters: { name: string; score: number; feedback: string }[];
+}
+
 export interface ATSResult {
   ats_score: number;
+  detailed_breakdown?: DetailedScore[];
   suggestions: string[];
   line_feedback: ATSLineFeedback[];
 }
@@ -30,7 +37,20 @@ export interface CareerStep {
   current_role: string;
   next_role: string;
   missing_skills: string[];
-  learning_resources: Record<string, any>;
+  learning_resources: Record<string, string>;
+}
+
+export interface ResumeHistoryItem {
+  _id: string;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface JDTargetingResult {
+  matchScore: number;
+  matchingKeywords: string[];
+  missingKeywords: string[];
 }
 
 export interface CareerPathData {

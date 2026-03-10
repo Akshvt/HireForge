@@ -1,0 +1,54 @@
+# HireForge: Senior Developer Gap Analysis
+
+## 🎯 Executive Summary
+HireForge has a solid foundation for a "Resume Optimizer" type application, but currently relies heavily on **mock data** and **basic heuristic matching**. To be a viable job seeker platform, it needs to transition from "Mocked Logic" to "Data-Driven Intelligence".
+
+---
+
+## 🏗️ Architectural Gaps (Backend)
+
+### 1. Mocked Services (Critical)
+- **Job Matching:** The `JobMatchService` uses a hardcoded array of 4 jobs. There is no [Job](file:///c:/My%20Projects/HireForge/backend-node/src/services/jobMatch.service.ts#9-52) model in MongoDB, and no way to ingest real jobs.
+- **ATS Scoring:** The `ATSScoringEngine` uses a static list of ~20 skills. It fails to recognize synonyms (e.g., "JS" vs "JavaScript") or project-specific skills.
+- **AI Integration:** The frontend mentions "AI Rewrites", but there is **zero implementation** for this in the `backend-node`.
+
+### 2. Data Structure & Models
+- **Missing [Job](file:///c:/My%20Projects/HireForge/backend-node/src/services/jobMatch.service.ts#9-52) Model:** No schema to store job listings.
+- **Missing `Application` Model:** No way for users to track jobs they've applied to or saved.
+- **Profile Data:** The `User` model is minimal. It lacks fields for "Target Role", "Experience Level", or "Location Preferences".
+
+### 3. Resume Intelligence
+- **Entity Extraction:** The [resumeParser.service.ts](file:///c:/My%20Projects/HireForge/backend-node/src/services/resumeParser.service.ts) only extracts raw text. It does not identify "Experience", "Education", or "Skills" as separate entities. This makes high-quality matching impossible.
+
+---
+
+## 🎨 UI/UX Gaps (Frontend)
+
+### 1. Missing Pages
+- **Profile Page:** No place for users to manage their account, target roles, or see their combined career progress.
+- **Job Detail Page:** Clicking a recommendation has no destination. Users can't see the full job description.
+- **Resume Editor:** The dashboard shows an "AI Rewrites" stat, but there is no interface to actually rewrite or optimize resume bullets.
+
+### 2. Navigation & Flux
+- **Navbar:** Primarily handles auth. It lacks links to a "Job Board" or "Resources" section.
+- **Dashboard Fatigue:** The dashboard is trying to do everything (upload, history, scores, jobs) in one view. It should be split into logical sub-pages as the app grows.
+
+---
+
+## 🛠️ Technical Debt
+- **Type Safety:** Many backend services use `any` or have minimal type definitions.
+- **Error Handling:** Centralized error handling is basic. Controller `try-catch` blocks are manual and repetitive.
+- **Testing:** Zero automated tests were found (unit, integration, or E2E).
+
+---
+
+## 🚀 Priority Recommendations
+
+| Priority | Feature | Description |
+| :--- | :--- | :--- |
+| **P0** | **Real Job Database** | Implement [Job](file:///c:/My%20Projects/HireForge/backend-node/src/services/jobMatch.service.ts#9-52) model and an endpoint to search/filter jobs. |
+| **P1** | **Profile Page** | Build `/profile` for user data management. |
+| **P1** | **Skill Extraction** | Enhance parser to return an object with `{ skills: [], experience: [], education: [] }`. |
+| **P2** | **Job Detail View** | Create a route to view a specific job's requirements. |
+| **P2** | **Google Sign-In** | (Requested for future) Prepare auth architecture for OAuth. |
+| **P3** | **LLM Integration** | Replace manual regex scoring with an OpenAI/Anthropic prompt for "Real" ATS feedback. |

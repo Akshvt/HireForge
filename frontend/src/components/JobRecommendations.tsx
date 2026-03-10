@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import api from "@/services/api";
 import type { ResumeData, Job } from "@/types/resume";
+import { toast } from "sonner";
 
 interface JobRecommendationsProps {
   resumeData: ResumeData;
@@ -39,22 +40,33 @@ export default function JobRecommendations({ resumeData }: JobRecommendationsPro
     try {
       setLoading(true);
 
-      const res = await api.post<{ recommended_jobs: Job[] }>(
-        "/jobs/recommend",
+      const res = await api.post<{ matches: Record<string, unknown>[] }>(
+        "/api/jobs/match",
         {
-          resume_text: resumeData.resume_text,
           skills: resumeData.skills,
-          experience: resumeData.experience
+          desiredRole: filter !== "ALL" ? filter : ""
         }
       );
 
-      setJobs(res.data.recommended_jobs || []);
+      // Map backend JobRecommendation to frontend Job type
+      const mappedJobs: Job[] = (res.data.matches || []).map(m => ({
+        title: String(m.title),
+        job_type: "FRESHER", // Default for now
+        experience_level: "Entry Level",
+        skills: Array.isArray(m.matchingSkills) ? m.matchingSkills : [],
+        final_score: Number(m.matchScore),
+        linkedin_link: `https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(String(m.title))}`,
+        naukri_link: `https://www.naukri.com/${encodeURIComponent(String(m.title))}-jobs`
+      }));
+
+      setJobs(mappedJobs);
       setHasSearched(true);
-    } catch (err: any) {
-      setError(
-        err?.response?.data?.detail ||
-          "Failed to fetch job recommendations. Try again."
-      );
+      toast.success(`Found ${mappedJobs.length} matches!`);
+    } catch (err: unknown) {
+      const errorMessage = (err as { response?: { data?: { message?: string } } }).response?.data?.message ||
+        "Failed to fetch job recommendations. Try again.";
+      setError(errorMessage);
+      toast.error(errorMessage);
       setJobs([]);
       setHasSearched(true);
     } finally {
@@ -138,7 +150,7 @@ export default function JobRecommendations({ resumeData }: JobRecommendationsPro
                   onClick={() => setFilter(f.value)}
                   className={cn(
                     filter === f.value &&
-                      "gradient-accent text-accent-foreground"
+                    "gradient-accent text-accent-foreground"
                   )}
                 >
                   {f.label}

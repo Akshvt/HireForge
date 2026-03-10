@@ -20,6 +20,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ProgressBar } from "@/components/ui/progress-bar";
 import { cn } from "@/lib/utils";
 import api from "@/services/api";
+import { toast } from "sonner";
 
 import type { ResumeData } from "@/types/resume";
 
@@ -71,18 +72,19 @@ export default function CareerPath({ resumeData }: CareerPathProps) {
     try {
       setLoading(true);
 
-      const res = await api.post<CareerAPIResponse>("/career/recommend", {
+      const res = await api.post<{ careerPath: CareerAPIResponse }>("/api/career/recommend", {
         skills: resumeData.skills
       });
 
-      setData(res.data);
+      setData(res.data.careerPath);
       setView("PRIMARY");
       setProgress({});
-    } catch (err: any) {
-      setError(
-        err?.response?.data?.detail ||
-          "Failed to generate career path. Please try again."
-      );
+      toast.success("Career Roadmap generated!");
+    } catch (err: unknown) {
+      const errorMessage = (err as { response?: { data?: { message?: string } } }).response?.data?.message ||
+        "Failed to generate career path. Please try again.";
+      setError(errorMessage);
+      toast.error(errorMessage);
       setData(null);
     } finally {
       setLoading(false);
