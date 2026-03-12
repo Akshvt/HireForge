@@ -1,16 +1,15 @@
 import { promises as fs } from 'fs';
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
-const { PDFParse } = require('pdf-parse');
 import mammoth from 'mammoth';
 
 export const parseResume = async (filePath: string, mimeType: string): Promise<string> => {
     try {
         if (mimeType === 'application/pdf') {
             const dataBuffer = await fs.readFile(filePath);
+            const { PDFParse } = require('pdf-parse');
             const parser = new PDFParse({ data: dataBuffer });
             const result = await parser.getText();
-            await parser.destroy();
             return result.text;
         } else if (
             mimeType === 'application/msword' ||
