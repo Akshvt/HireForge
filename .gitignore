@@ -67,3 +67,31 @@ Thumbs.db
 ################################
 coverage/
 .pytest_cache/
+
+################################
+# 🔹 Node / Backend
+################################
+node_modules/
+dist/
+
+# Logs
+*.log
+
+# Environment variables (sensitive)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# OS / Editor junk
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+
+# Coverage
+coverage/
+
+.agent/

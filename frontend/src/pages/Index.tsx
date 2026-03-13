@@ -1,97 +1,123 @@
-import { useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Target, Briefcase, TrendingUp, FileText } from "lucide-react";
-import Header from "@/components/Header";
-import ResumeUpload from "@/components/ResumeUpload";
-import ATSScore from "@/components/ATSScore";
-import JobRecommendations from "@/components/JobRecommendations";
-import CareerPath from "@/components/CareerPath";
-import type { ResumeData } from "@/types/resume";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { ArrowRight, CheckCircle2, FileText, Target, Zap } from "lucide-react";
+import { useAuthStore } from "@/store/authStore";
+import { useEffect } from "react";
 
 const Index = () => {
-  const [resumeData, setResumeData] = useState<ResumeData | null>(null);
+  const { isAuthenticated } = useAuthStore();
+  const navigate = useNavigate();
 
-  const isResumeUploaded = resumeData && resumeData.resume_text.length > 0;
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/dashboard");
+    }
+  }, [isAuthenticated, navigate]);
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
+    <div className="flex flex-col gap-20 pb-20">
+      {/* Hero Section */}
+      <section className="relative px-4 pt-20 pb-32 text-center md:pt-32 md:pb-48 overflow-hidden">
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(45%_40%_at_50%_50%,rgba(var(--primary-rgb),0.1)_0%,transparent_100%)]" />
+        <div className="container max-w-5xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-1000">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium">
+            <Zap className="h-4 w-4 fill-current" />
+            <span>AI-Powered Career Optimization</span>
+          </div>
+          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-balance">
+            Land your dream job with <span className="text-primary italic">HireForge</span>
+          </h1>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-balance">
+            The free alternative to ResumeWorded. Optimize your resume for ATS, discover matching jobs, and get personalized career advice.
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
+            <Button size="lg" className="h-12 px-8 text-lg gap-2" onClick={() => navigate("/register")}>
+              Get Started for Free <ArrowRight className="h-5 w-5" />
+            </Button>
+            <Button size="lg" variant="outline" className="h-12 px-8 text-lg" onClick={() => navigate("/login")}>
+              Login
+            </Button>
+          </div>
+        </div>
+      </section>
 
-      <main className="container max-w-5xl mx-auto px-4 py-8 -mt-8">
-        <div className="grid gap-8">
-          {/* Resume Upload - Always visible */}
-          <section className="animate-slide-up">
-            <ResumeUpload onParsed={setResumeData} resumeData={resumeData} />
-          </section>
+      {/* Features Grid */}
+      <section className="container max-w-5xl mx-auto px-4">
+        <div className="grid md:grid-cols-3 gap-8">
+          <div className="p-8 rounded-3xl border bg-card hover:shadow-lg transition-shadow space-y-4">
+            <div className="p-3 rounded-2xl bg-blue-500/10 text-blue-600 w-fit">
+              <Target className="h-6 w-6" />
+            </div>
+            <h3 className="text-2xl font-bold">ATS Optimizer</h3>
+            <p className="text-muted-foreground">
+              Score your resume against 20+ parameters used by recruiters and ATS systems.
+            </p>
+          </div>
+          <div className="p-8 rounded-3xl border bg-card hover:shadow-lg transition-shadow space-y-4">
+            <div className="p-3 rounded-2xl bg-green-500/10 text-green-600 w-fit">
+              <FileText className="h-6 w-6" />
+            </div>
+            <h3 className="text-2xl font-bold">JD Targeting</h3>
+            <p className="text-muted-foreground">
+              Compare your resume against any job description to find missing keywords and gaps.
+            </p>
+          </div>
+          <div className="p-8 rounded-3xl border bg-card hover:shadow-lg transition-shadow space-y-4">
+            <div className="p-3 rounded-2xl bg-orange-500/10 text-orange-600 w-fit">
+              <Zap className="h-6 w-6" />
+            </div>
+            <h3 className="text-2xl font-bold">Smart Matching</h3>
+            <p className="text-muted-foreground">
+              Instantly find and apply to jobs that match your skills and experience.
+            </p>
+          </div>
+        </div>
+      </section>
 
-          {/* Feature Tabs - Only visible after resume upload */}
-          {isResumeUploaded && (
-            <section className="animate-slide-up stagger-2">
-              <Tabs defaultValue="ats" className="w-full">
-                <TabsList className="w-full grid grid-cols-3 h-auto p-1 bg-muted rounded-xl">
-                  <TabsTrigger 
-                    value="ats" 
-                    className="flex items-center gap-2 py-3 data-[state=active]:gradient-accent data-[state=active]:text-accent-foreground rounded-lg"
-                  >
-                    <Target className="h-4 w-4" />
-                    <span className="hidden sm:inline">ATS Score</span>
-                    <span className="sm:hidden">ATS</span>
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="jobs" 
-                    className="flex items-center gap-2 py-3 data-[state=active]:gradient-accent data-[state=active]:text-accent-foreground rounded-lg"
-                  >
-                    <Briefcase className="h-4 w-4" />
-                    <span className="hidden sm:inline">Jobs</span>
-                    <span className="sm:hidden">Jobs</span>
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="career" 
-                    className="flex items-center gap-2 py-3 data-[state=active]:gradient-accent data-[state=active]:text-accent-foreground rounded-lg"
-                  >
-                    <TrendingUp className="h-4 w-4" />
-                    <span className="hidden sm:inline">Career Path</span>
-                    <span className="sm:hidden">Career</span>
-                  </TabsTrigger>
-                </TabsList>
-
-                <div className="mt-6">
-                  <TabsContent value="ats" className="mt-0">
-                    <ATSScore resumeData={resumeData} />
-                  </TabsContent>
-                  <TabsContent value="jobs" className="mt-0">
-                    <JobRecommendations resumeData={resumeData} />
-                  </TabsContent>
-                  <TabsContent value="career" className="mt-0">
-                    <CareerPath resumeData={resumeData} />
-                  </TabsContent>
+      {/* Social Proof / Checkmarks */}
+      <section className="bg-muted/50 py-20">
+        <div className="container max-w-5xl mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
+          <div className="space-y-6">
+            <h2 className="text-4xl font-bold">Why choose HireForge?</h2>
+            <div className="space-y-4">
+              {[
+                "100% Free - No hidden premium tiers",
+                "Built by developers, for developers",
+                "Deep ATS analysis across 20+ parameters",
+                "Real-time job matching from top platforms",
+                "Secure and private resume storage"
+              ].map((item) => (
+                <div key={item} className="flex items-center gap-3">
+                  <CheckCircle2 className="h-5 w-5 text-green-500" />
+                  <span className="font-medium">{item}</span>
                 </div>
-              </Tabs>
-            </section>
-          )}
-
-          {/* Empty State */}
-          {!isResumeUploaded && (
-            <section className="text-center py-12 animate-fade-in stagger-3">
-              <div className="p-4 rounded-full bg-muted inline-flex mb-4">
-                <FileText className="h-8 w-8 text-muted-foreground" />
-              </div>
-              <h2 className="text-xl font-semibold text-foreground mb-2">
-                Ready to optimize your career?
-              </h2>
-              <p className="text-muted-foreground max-w-md mx-auto">
-                Upload your resume above to unlock ATS scoring, job recommendations, and personalized career paths.
-              </p>
-            </section>
-          )}
+              ))}
+            </div>
+          </div>
+          <div className="bg-gradient-to-br from-primary/20 to-secondary/20 rounded-3xl aspect-video border flex items-center justify-center p-8">
+            <div className="bg-card rounded-2xl p-6 shadow-xl border w-full space-y-4 animate-pulse">
+              <div className="h-4 w-1/2 bg-muted rounded" />
+              <div className="h-10 w-full bg-muted rounded" />
+              <div className="h-24 w-full bg-muted rounded" />
+            </div>
+          </div>
         </div>
-      </main>
+      </section>
 
-      {/* Footer */}
-      <footer className="border-t bg-muted/30 py-8 mt-12">
-        <div className="container max-w-5xl mx-auto px-4 text-center text-sm text-muted-foreground">
-          <p>Built with AI to help you land your dream job</p>
-        </div>
+      {/* CTA Section */}
+      <section className="container max-w-5xl mx-auto px-4 text-center space-y-8">
+        <h2 className="text-4xl font-bold">Ready to land your next role?</h2>
+        <p className="text-xl text-muted-foreground max-w-xl mx-auto">
+          Join thousands of developers using HireForge to optimize their career path.
+        </p>
+        <Button size="lg" className="h-14 px-10 text-lg rounded-full" onClick={() => navigate("/register")}>
+          Create Free Account
+        </Button>
+      </section>
+
+      {/* Standard Footer */}
+      <footer className="container max-w-5xl mx-auto px-4 pt-10 border-t text-center text-sm text-muted-foreground">
+        <p>© 2026 HireForge. Part of the CodeSage Suite.</p>
       </footer>
     </div>
   );

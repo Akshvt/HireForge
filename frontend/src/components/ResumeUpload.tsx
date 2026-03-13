@@ -11,6 +11,7 @@ import {
 import { cn } from "@/lib/utils";
 import api from "@/services/api";
 import type { ResumeData } from "@/types/resume";
+import { toast } from "sonner";
 
 interface ResumeUploadProps {
   onParsed: (data: ResumeData) => void;
@@ -43,7 +44,9 @@ export default function ResumeUpload({
 
     const droppedFile = e.dataTransfer.files?.[0];
     if (!droppedFile || !isValidFile(droppedFile)) {
-      setError("Please upload a valid PDF, DOC, or DOCX file.");
+      const msg = "Please upload a valid PDF, DOC, or DOCX file.";
+      setError(msg);
+      toast.error(msg);
       return;
     }
 
@@ -67,44 +70,36 @@ export default function ResumeUpload({
     setError(null);
 
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append("resume", file); // Backend expects 'resume' field name
 
     try {
-      const res = await api.post<any>("/resume/upload", formData);
+      const res = await api.post<{ parsedText: string; skills: string[] }>("/api/resumes/upload", formData);
 
       /**
-       * 🔥 FUTURE-PROOF NORMALIZATION
-       * Supports:
-       * - { parsed_resume: {...} }
-       * - { parsedResume: {...} }
-       * - { resume_text, skills, experience }
+       * Backend returns:
+       * { message, version, resumeId, parsedText, skills }
        */
-      const parsed: ResumeData | undefined =
-        res.data?.parsed_resume ||
-        res.data?.parsedResume ||
-        (res.data?.resume_text ? res.data : undefined);
+      const parsedText = res.data.parsedText;
+      const skills = res.data.skills || [];
 
-      if (
-        !parsed ||
-        typeof parsed.resume_text !== "string" ||
-        parsed.resume_text.trim().length < 50
-      ) {
+      if (!parsedText || typeof parsedText !== "string" || parsedText.trim().length < 50) {
         throw new Error("Invalid resume content");
       }
 
       // ✅ SUCCESS
       setError(null);
+      toast.success("Resume uploaded and analyzed!");
       onParsed({
-        resume_text: parsed.resume_text,
-        skills: parsed.skills ?? [],
-        experience: parsed.experience ?? 0,
+        resume_text: parsedText,
+        skills: skills,
+        experience: 0,
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Resume upload error:", err);
-      setError(
-        err?.response?.data?.detail ||
-          "Failed to parse resume. Please upload a valid resume."
-      );
+      const errorMessage = (err as { response?: { data?: { message?: string } } }).response?.data?.message ||
+        "Failed to parse resume. Please upload a valid resume.";
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }

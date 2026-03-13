@@ -1,11 +1,19 @@
 import { useState } from "react";
-import { Target, Sparkles, Download, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
+import { Target, Sparkles, Download, Loader2, AlertCircle, CheckCircle2, ChevronRight, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScoreRing } from "@/components/ui/score-ring";
+import { Progress } from "@/components/ui/progress";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 import api from "@/services/api";
-import type { ResumeData, ATSResult } from "@/types/resume";
+import type { ResumeData, ATSResult, DetailedScore } from "@/types/resume";
+import { toast } from "sonner";
 
 interface ATSScoreProps {
   resumeData: ResumeData;
@@ -19,97 +27,38 @@ export default function ATSScore({ resumeData }: ATSScoreProps) {
 
   const calculateATS = async () => {
     if (!resumeData.resume_text || resumeData.resume_text.length < 50) {
+      toast.error("Please upload a valid resume first.");
       return;
     }
 
     try {
       setLoading(true);
-      const res = await api.post<ATSResult>("/ats/score", {
-        resume_text: resumeData.resume_text,
+      const res = await api.post<{ score: ATSResult }>("/api/evaluate", {
+        resumeText: resumeData.resume_text,
         skills: resumeData.skills,
         experience: resumeData.experience
       });
-      setResult(res.data);
-    } catch {
-      // Demo data for preview
-      setResult({
-        ats_score: 72,
-        suggestions: [
-          "Add more quantifiable achievements with numbers and percentages",
-          "Include industry-specific keywords from job descriptions",
-          "Use action verbs at the beginning of bullet points",
-          "Ensure consistent formatting throughout the document"
-        ],
-        line_feedback: [
-          {
-            line: "Worked on various projects",
-            issues: ["Too vague", "Missing quantifiable results"],
-            improved_example: "Led 5 cross-functional projects, improving team efficiency by 25%"
-          },
-          {
-            line: "Good communication skills",
-            issues: ["Subjective claim without evidence"],
-            improved_example: "Presented technical solutions to stakeholders across 3 departments"
-          }
-        ]
-      });
+      setResult(res.data.score);
+      toast.success("ATS Analysis complete!");
+    } catch (err: unknown) {
+      const errorMessage = (err as { response?: { data?: { message?: string } } }).response?.data?.message ||
+        "Failed to analyze ATS score.";
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
-  const applyFixes = async () => {
-    if (!result) return;
-    
-    try {
-      setApplyingFixes(true);
-      const res = await api.post<{ improved_resume: string }>("/ats/apply-fixes", {
-        resume_text: resumeData.resume_text,
-        feedback: result.line_feedback
-      });
-      setImprovedResume(res.data.improved_resume);
-    } catch {
-      // Demo improved resume
-      setImprovedResume(`IMPROVED RESUME
-
-PROFESSIONAL SUMMARY
-Results-driven software engineer with ${resumeData.experience}+ years of experience in ${resumeData.skills.slice(0, 3).join(", ")}. Proven track record of delivering high-quality solutions.
-
-SKILLS
-${resumeData.skills.join(" • ")}
-
-EXPERIENCE
-• Led development of 5+ full-stack applications, improving user engagement by 40%
-• Collaborated with cross-functional teams of 10+ members to deliver projects on time
-• Implemented automated testing frameworks, reducing bug reports by 60%
-• Mentored 3 junior developers, improving team productivity by 25%`);
-    } finally {
-      setApplyingFixes(false);
-    }
+  const getScoreColor = (score: number) => {
+    if (score >= 80) return "text-success bg-success/10 border-success/20";
+    if (score >= 60) return "text-accent bg-accent/10 border-accent/20";
+    return "text-warning bg-warning/10 border-warning/20";
   };
 
-  const exportPDF = async () => {
-    try {
-      const res = await api.post<Blob>(
-        "/ats/export-pdf",
-        { resume_text: improvedResume },
-        { responseType: "blob" }
-      );
-
-      const url = window.URL.createObjectURL(new Blob([res.data]));
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "Improved_Resume.pdf";
-      a.click();
-    } catch {
-      // Create text file as fallback
-      const blob = new Blob([improvedResume], { type: 'text/plain' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "Improved_Resume.txt";
-      a.click();
-    }
+  const getProgressColor = (score: number) => {
+    if (score >= 80) return "bg-success";
+    if (score >= 60) return "bg-accent";
+    return "bg-warning";
   };
 
   return (
@@ -122,21 +71,21 @@ EXPERIENCE
           <div>
             <CardTitle className="text-xl">ATS Score Analyzer</CardTitle>
             <CardDescription className="text-primary-foreground/70">
-              Optimize your resume for applicant tracking systems
+              In-depth 20-parameter performance analysis
             </CardDescription>
           </div>
         </div>
       </CardHeader>
       <CardContent className="pt-6">
         {!result ? (
-          <div className="text-center py-8">
-            <p className="text-muted-foreground mb-4">
-              Get insights on how well your resume will perform with ATS systems
+          <div className="text-center py-12">
+            <p className="text-muted-foreground mb-6">
+              Get an expert analysis of your resume formatting, keywords, and content quality.
             </p>
-            <Button 
-              onClick={calculateATS} 
+            <Button
+              onClick={calculateATS}
               disabled={loading}
-              className="gradient-accent text-accent-foreground hover:opacity-90"
+              className="gradient-accent text-accent-foreground hover:opacity-90 min-w-[200px]"
               size="lg"
             >
               {loading ? (
@@ -147,100 +96,108 @@ EXPERIENCE
               ) : (
                 <>
                   <Target className="mr-2 h-4 w-4" />
-                  Calculate ATS Score
+                  Run ATS Analysis
                 </>
               )}
             </Button>
           </div>
         ) : (
-          <div className="space-y-6 animate-fade-in">
+          <div className="space-y-8 animate-fade-in">
             {/* Score Display */}
-            <div className="flex flex-col items-center py-4">
+            <div className="flex flex-col items-center py-4 bg-muted/30 rounded-3xl">
               <ScoreRing score={result.ats_score} size="lg" />
               <p className={cn(
-                "mt-4 font-semibold text-lg",
-                result.ats_score >= 80 ? "text-success" : 
-                result.ats_score >= 60 ? "text-accent" : "text-warning"
+                "mt-4 font-bold text-xl",
+                result.ats_score >= 80 ? "text-success" :
+                  result.ats_score >= 60 ? "text-accent" : "text-warning"
               )}>
-                {result.ats_score >= 80 ? "Excellent!" : 
-                 result.ats_score >= 60 ? "Good, but can improve" : "Needs improvement"}
+                {result.ats_score >= 80 ? "Elite Score!" :
+                  result.ats_score >= 60 ? "Strong Foundation" : "Needs Optimization"}
+              </p>
+              <p className="text-sm text-muted-foreground mt-1">
+                Your score is higher than {result.ats_score - 10}% of applicants.
               </p>
             </div>
 
-            {/* Suggestions */}
-            <div className="space-y-3">
-              <h4 className="font-semibold flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-accent" />
-                Suggestions
-              </h4>
-              <ul className="space-y-2">
-                {result.suggestions.map((s, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
-                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    {s}
-                  </li>
+            {/* Detailed Breakdown */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="font-bold text-lg">Detailed Analysis</h3>
+                <span className="text-xs font-medium text-muted-foreground bg-muted px-2 py-1 rounded-full">
+                  20 Parameters Checked
+                </span>
+              </div>
+
+              <Accordion type="single" collapsible className="w-full space-y-3">
+                {result.detailed_breakdown?.map((cat, idx) => (
+                  <AccordionItem key={idx} value={`item-${idx}`} className="border rounded-2xl px-4 overflow-hidden bg-card shadow-sm border-muted/20">
+                    <AccordionTrigger className="hover:no-underline py-4">
+                      <div className="flex items-center justify-between w-full pr-4">
+                        <span className="font-semibold text-sm">{cat.category}</span>
+                        <div className="flex items-center gap-3">
+                          <span className={cn("text-xs font-bold px-2 py-0.5 rounded-full border", getScoreColor(cat.score))}>
+                            {cat.score}%
+                          </span>
+                        </div>
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="pb-4 pt-1 space-y-4 border-t border-muted/10 mt-1">
+                      {cat.subParameters.map((param, pIdx) => (
+                        <div key={pIdx} className="space-y-2">
+                          <div className="flex items-center justify-between text-xs">
+                            <span className="font-medium flex items-center gap-1.5">
+                              {param.score >= 80 ? (
+                                <CheckCircle2 className="h-3.5 w-3.5 text-success" />
+                              ) : (
+                                <Info className="h-3.5 w-3.5 text-muted-foreground" />
+                              )}
+                              {param.name}
+                            </span>
+                            <span className="text-muted-foreground">{param.score}%</span>
+                          </div>
+                          <Progress value={param.score} className="h-1.5" indicatorClassName={getProgressColor(param.score)} />
+                          {param.score < 80 && (
+                            <p className="text-[10px] text-muted-foreground italic pl-5">
+                              💡 {param.feedback}
+                            </p>
+                          )}
+                        </div>
+                      ))}
+                    </AccordionContent>
+                  </AccordionItem>
                 ))}
-              </ul>
+              </Accordion>
             </div>
 
-            {/* Line Feedback */}
-            <div className="space-y-3">
-              <h4 className="font-semibold flex items-center gap-2">
-                <AlertCircle className="h-4 w-4 text-warning" />
-                Line-by-Line Feedback
+            {/* Suggestions */}
+            <div className="grid gap-4">
+              <h4 className="font-bold flex items-center gap-2">
+                <Sparkles className="h-4 w-4 text-accent" />
+                Strategic Suggestions
               </h4>
-              <div className="space-y-4">
-                {result.line_feedback.map((l, i) => (
-                  <div key={i} className="p-4 rounded-lg bg-muted/50 space-y-2">
-                    <p className="font-medium text-sm text-destructive line-through">{l.line}</p>
-                    <ul className="text-xs text-muted-foreground space-y-1">
-                      {l.issues.map((iss, j) => (
-                        <li key={j} className="flex items-center gap-1">
-                          <span className="w-1.5 h-1.5 rounded-full bg-warning" />
-                          {iss}
-                        </li>
-                      ))}
-                    </ul>
-                    <p className="text-sm text-success font-medium">✨ {l.improved_example}</p>
+              <div className="grid gap-2">
+                {result.suggestions.map((s, i) => (
+                  <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-orange-500/5 border border-orange-500/10 text-sm">
+                    <div className="p-1 rounded-full bg-orange-500/20 text-orange-600 shrink-0 mt-0.5">
+                      <ChevronRight className="h-3 w-3" />
+                    </div>
+                    {s}
                   </div>
                 ))}
               </div>
             </div>
 
-            <Button 
-              onClick={applyFixes} 
-              disabled={applyingFixes}
-              className="w-full gradient-accent text-accent-foreground hover:opacity-90"
-              size="lg"
-            >
-              {applyingFixes ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Applying Fixes...
-                </>
-              ) : (
-                <>
-                  <Sparkles className="mr-2 h-4 w-4" />
-                  Apply All Fixes
-                </>
-              )}
-            </Button>
-          </div>
-        )}
-
-        {improvedResume && (
-          <div className="mt-6 space-y-4 animate-slide-up">
-            <h4 className="font-semibold flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4 text-success" />
-              Improved Resume
-            </h4>
-            <div className="p-4 rounded-lg bg-success/5 border border-success/20 max-h-64 overflow-y-auto">
-              <pre className="text-sm whitespace-pre-wrap text-foreground">{improvedResume}</pre>
+            <div className="flex flex-col gap-3">
+              <Button
+                onClick={calculateATS}
+                disabled={loading}
+                variant="outline"
+                className="w-full rounded-xl"
+              >
+                <Target className="mr-2 h-4 w-4" />
+                Refresh Analysis
+              </Button>
             </div>
-            <Button onClick={exportPDF} variant="outline" className="w-full" size="lg">
-              <Download className="mr-2 h-4 w-4" />
-              Export as PDF
-            </Button>
           </div>
         )}
       </CardContent>
