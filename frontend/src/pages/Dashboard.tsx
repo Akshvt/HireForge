@@ -10,6 +10,7 @@ import { useState, useEffect } from "react";
 import type { ResumeData } from "@/types/resume";
 import { FileText, Award, Briefcase, Zap } from "lucide-react";
 import JDTargeting from "@/components/JDTargeting";
+import CareerTipsFeed from "@/components/CareerTipsFeed";
 import api from "@/services/api";
 
 const Dashboard = () => {
@@ -126,7 +127,8 @@ const Dashboard = () => {
                         )}
                     </div>
 
-                    <div className="space-y-8">
+                    <div className="space-y-6">
+                        <CareerTipsFeed />
                         <ResumeHistory />
                     </div>
                 </div>

@@ -10,7 +10,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Briefcase, User, LogOut, LayoutDashboard } from "lucide-react";
+import { Briefcase, User, LogOut, LayoutDashboard, Code2, Info, HelpCircle, Zap, BookOpen } from "lucide-react";
 
 const Navbar = () => {
     const { user, isAuthenticated, clearAuth } = useAuthStore();
@@ -28,6 +28,22 @@ const Navbar = () => {
                     <Briefcase className="h-6 w-6 text-primary" />
                     <span>HireForge</span>
                 </Link>
+
+                {/* Center Nav Links */}
+                <div className="hidden md:flex items-center gap-6">
+                    <Link to="/how-it-works" className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5">
+                        <Zap className="h-3.5 w-3.5" /> How It Works
+                    </Link>
+                    <Link to="/about" className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5">
+                        <Info className="h-3.5 w-3.5" /> About
+                    </Link>
+                    <Link to="/faq" className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5">
+                        <HelpCircle className="h-3.5 w-3.5" /> FAQ
+                    </Link>
+                    <a href="https://codesage.dev" target="_blank" rel="noopener noreferrer" className="text-sm text-accent hover:text-accent/80 transition-colors flex items-center gap-1.5 font-medium">
+                        <Code2 className="h-3.5 w-3.5" /> CodeSage ↗
+                    </a>
+                </div>
 
                 <div className="flex items-center gap-4">
                     {isAuthenticated ? (
@@ -61,6 +77,15 @@ const Navbar = () => {
                                         <span>Profile</span>
                                     </DropdownMenuItem>
                                     <DropdownMenuSeparator />
+                                    <DropdownMenuItem onClick={() => navigate("/about")}>
+                                        <Info className="mr-2 h-4 w-4" />
+                                        <span>About HireForge</span>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => navigate("/how-it-works")}>
+                                        <BookOpen className="mr-2 h-4 w-4" />
+                                        <span>How It Works</span>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuSeparator />
                                     <DropdownMenuItem onClick={handleLogout} className="text-destructive focus:text-destructive">
                                         <LogOut className="mr-2 h-4 w-4" />
                                         <span>Log out</span>
@@ -74,7 +99,7 @@ const Navbar = () => {
                                 <Link to="/login">Login</Link>
                             </Button>
                             <Button asChild>
-                                <Link to="/register">Register</Link>
+                                <Link to="/register">Get Started Free</Link>
                             </Button>
                         </div>
                     )}
