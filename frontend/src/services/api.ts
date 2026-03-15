@@ -1,3 +1,5 @@
+import { useAuthStore } from '../store/authStore';
+
 // Mock API service - replace with your actual backend URL
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -39,6 +41,10 @@ const api: ApiService = {
     });
 
     if (!response.ok) {
+      if (response.status === 401) {
+        useAuthStore.getState().clearAuth();
+        window.location.href = '/login';
+      }
       const error = await response.json().catch(() => ({ message: 'Request failed' }));
       const errorData = {
         message: error.message || error.error || 'Request failed'
@@ -73,6 +79,10 @@ const api: ApiService = {
     });
 
     if (!response.ok) {
+      if (response.status === 401) {
+        useAuthStore.getState().clearAuth();
+        window.location.href = '/login';
+      }
       const error = await response.json().catch(() => ({ message: 'Request failed' }));
       const errorData = {
         message: error.message || error.error || 'Request failed'
@@ -110,6 +120,10 @@ const api: ApiService = {
     });
 
     if (!response.ok) {
+      if (response.status === 401) {
+        useAuthStore.getState().clearAuth();
+        window.location.href = '/login';
+      }
       const error = await response.json().catch(() => ({ message: 'Request failed' }));
       const errorData = {
         message: error.message || error.error || 'Request failed'
@@ -140,6 +154,10 @@ const api: ApiService = {
     });
 
     if (!response.ok) {
+      if (response.status === 401) {
+        useAuthStore.getState().clearAuth();
+        window.location.href = '/login';
+      }
       const error = await response.json().catch(() => ({ message: 'Request failed' }));
       const errorData = {
         message: error.message || error.error || 'Request failed'

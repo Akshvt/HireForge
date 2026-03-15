@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Target, Sparkles, Download, Loader2, AlertCircle, CheckCircle2, ChevronRight, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -24,6 +25,7 @@ export default function ATSScore({ resumeData }: ATSScoreProps) {
   const [improvedResume, setImprovedResume] = useState("");
   const [loading, setLoading] = useState(false);
   const [applyingFixes, setApplyingFixes] = useState(false);
+  const navigate = useNavigate();
 
   const calculateATS = async () => {
     if (!resumeData.resume_text || resumeData.resume_text.length < 50) {
@@ -188,6 +190,20 @@ export default function ATSScore({ resumeData }: ATSScoreProps) {
             </div>
 
             <div className="flex flex-col gap-3">
+              <Button
+                onClick={() => navigate("/rewrite", {
+                  state: {
+                    resumeText: resumeData.resume_text,
+                    suggestions: result?.suggestions || [],
+                  }
+                })}
+                className="w-full rounded-xl gradient-accent text-accent-foreground transition-all hover:opacity-90"
+                size="lg"
+                id="rewrite-with-ai-btn"
+              >
+                <Sparkles className="mr-2 h-4 w-4" />
+                Rewrite with AI
+              </Button>
               <Button
                 onClick={calculateATS}
                 disabled={loading}
