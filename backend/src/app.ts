@@ -1,0 +1,57 @@
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import morgan from 'morgan';
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { connectDB } from './config/db.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+import authRoutes from './routes/auth.routes.js';
+import resumeRoutes from './routes/resume.routes.js';
+import evaluationRoutes from './routes/evaluation.routes.js';
+import jdRoutes from './routes/jd.routes.js';
+import jobRoutes from './routes/jobMatch.routes.js';
+import careerRoutes from './routes/career.routes.js';
+import userRoutes from './routes/user.routes.js';
+import aiRoutes from './routes/ai.routes.js';
+import { globalLimiter, authLimiter } from './middleware/rateLimiter.js';
+
+dotenv.config();
+
+const app = express();
+
+// Connect to Database
+connectDB();
+
+// Middleware
+app.use(express.json());
+app.use(cors());
+app.use(helmet());
+app.use(morgan('dev'));
+
+// Apply global rate limiter to all API routes
+app.use('/api', globalLimiter);
+
+// Routing
+app.use('/api/auth', authLimiter, authRoutes);
+app.use('/api/resumes', resumeRoutes);
+app.use('/api/evaluate', evaluationRoutes);
+app.use('/api/jd', jdRoutes);
+app.use('/api/jobs', jobRoutes);
+app.use('/api/career', careerRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/ai', aiRoutes);
+
+// Serve frontend in production-like environments
+const frontendDistPath = path.join(__dirname, '../../frontend/dist');
+app.use(express.static(frontendDistPath));
+
+app.use((_req, res) => {
+    res.sendFile(path.join(frontendDistPath, 'index.html'));
+});
+
+export default app;
