@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ChevronDown, ChevronUp, Search, HelpCircle, ArrowRight } from "lucide-react";
+import { ChevronDown, Search, HelpCircle, MessageCircle } from "lucide-react";
 import Footer from "@/components/Footer";
+import { motion, AnimatePresence } from "framer-motion";
+import GlassCard from "@/components/ui/GlassCard";
+import MagneticButton from "@/components/ui/MagneticButton";
 
 const faqCategories = [
   {
@@ -140,24 +143,44 @@ interface FAQItemProps {
 }
 
 const FAQItem = ({ q, a, isOpen, onToggle }: FAQItemProps) => (
-  <div className={`border rounded-xl transition-all ${isOpen ? "bg-card shadow-sm" : "bg-card/50 hover:bg-card"}`}>
+  <motion.div 
+    layout
+    className={`group rounded-2xl border transition-all duration-300 ${
+      isOpen 
+        ? "bg-white/[0.04] border-nebula/30 shadow-lg shadow-nebula/5" 
+        : "bg-white/[0.02] border-white/5 hover:border-white/20 hover:bg-white/[0.03]"
+    }`}
+  >
     <button
       onClick={onToggle}
-      className="w-full flex items-start justify-between gap-3 p-5 text-left"
-      id={`faq-${q.substring(0, 20).replace(/\s/g, "-").toLowerCase()}`}
+      className="w-full flex items-center justify-between gap-4 p-6 text-left"
     >
-      <span className="font-medium leading-snug">{q}</span>
-      {isOpen
-        ? <ChevronUp className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
-        : <ChevronDown className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
-      }
+      <span className={`font-bold text-lg leading-tight transition-colors ${isOpen ? "text-white" : "text-starlight/90 group-hover:text-white"}`}>{q}</span>
+      <motion.div
+        animate={{ rotate: isOpen ? 180 : 0 }}
+        transition={{ type: "spring", stiffness: 200, damping: 20 }}
+        className={`p-2 rounded-lg ${isOpen ? "bg-nebula/20 text-nebula" : "bg-white/5 text-dust group-hover:text-starlight"}`}
+      >
+        <ChevronDown className="h-4 w-4" />
+      </motion.div>
     </button>
-    {isOpen && (
-      <div className="px-5 pb-5">
-        <p className="text-sm text-muted-foreground leading-relaxed">{a}</p>
-      </div>
-    )}
-  </div>
+    
+    <AnimatePresence initial={false}>
+      {isOpen && (
+        <motion.div
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: "auto", opacity: 1 }}
+          exit={{ height: 0, opacity: 0 }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+          className="overflow-hidden"
+        >
+          <div className="px-6 pb-6 pt-0">
+            <p className="text-base text-dust leading-relaxed font-medium">{a}</p>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  </motion.div>
 );
 
 const FAQ = () => {
@@ -167,113 +190,172 @@ const FAQ = () => {
   const [activeCategory, setActiveCategory] = useState("general");
 
   const toggleItem = (key: string) => {
-    setOpenItems(prev => ({ ...prev, [key]: !prev[key] }));
+    setOpenItems(prev => ({ [key]: !prev[key] })); // Only allow one open at a time for cleaner UI
   };
 
-  const filteredCategories = faqCategories.map(cat => ({
-    ...cat,
-    faqs: cat.faqs.filter(faq =>
-      search === "" ||
-      faq.q.toLowerCase().includes(search.toLowerCase()) ||
-      faq.a.toLowerCase().includes(search.toLowerCase())
-    ),
-  })).filter(cat => search === "" ? cat.id === activeCategory : cat.faqs.length > 0);
-
-  const totalFaqs = faqCategories.reduce((acc, c) => acc + c.faqs.length, 0);
+  const filteredCategories = useMemo(() => {
+    return faqCategories.map(cat => ({
+      ...cat,
+      faqs: cat.faqs.filter(faq =>
+        search === "" ||
+        faq.q.toLowerCase().includes(search.toLowerCase()) ||
+        faq.a.toLowerCase().includes(search.toLowerCase())
+      ),
+    })).filter(cat => search === "" ? cat.id === activeCategory : cat.faqs.length > 0);
+  }, [search, activeCategory]);
 
   return (
-    <div className="flex flex-col">
-      {/* Hero */}
-      <section className="relative px-4 pt-16 pb-12 text-center overflow-hidden">
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(40%_30%_at_50%_50%,rgba(var(--primary-rgb),0.06)_0%,transparent_100%)]" />
-        <div className="container max-w-3xl mx-auto space-y-4 animate-in fade-in slide-in-from-bottom-6 duration-700">
-          <div className="flex items-center justify-center gap-2">
-            <HelpCircle className="h-6 w-6 text-primary" />
-            <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">Frequently Asked Questions</h1>
+    <div className="flex flex-col min-h-screen bg-void">
+      {/* ═══ Hero section ═══ */}
+      <section className="relative px-6 pt-32 pb-20 text-center overflow-hidden">
+        {/* Background Glimmer */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-[400px] bg-nebula/5 blur-[100px] rounded-full -z-10" />
+        
+        <div className="container max-w-4xl mx-auto space-y-8 animate-fade-in">
+          <motion.div 
+            className="flex items-center justify-center gap-3 mb-2"
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+          >
+            <div className="p-2.5 rounded-xl bg-nebula/10 text-nebula">
+              <HelpCircle className="h-7 w-7" />
+            </div>
+          </motion.div>
+          
+          <div className="space-y-4">
+            <h1 className="text-5xl md:text-7xl font-black tracking-tight text-white font-jakarta">
+              Everything you <br />
+              <span className="text-gradient">need to know.</span>
+            </h1>
+            <p className="text-xl text-dust font-medium max-w-2xl mx-auto leading-relaxed">
+              Find answers to common questions about ATS optimization, 
+              security, and how to fast-track your career with HireForge.
+            </p>
           </div>
-          <p className="text-lg text-muted-foreground">
-            {totalFaqs}+ answers across ATS scoring, resume tips, technical details, and more.
-          </p>
 
-          {/* Search */}
-          <div className="relative max-w-md mx-auto mt-4">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search questions..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="pl-9 h-11"
-              id="faq-search"
-            />
+          {/* Search Bar - Premium Focus Glow */}
+          <div className="relative max-w-xl mx-auto mt-6 group">
+            <div className="absolute -inset-1 bg-gradient-to-r from-nebula to-cyan rounded-2xl opacity-0 group-focus-within:opacity-20 blur-lg transition-opacity duration-500" />
+            <div className="relative flex items-center">
+              <Search className="absolute left-4 h-5 w-5 text-dust group-focus-within:text-nebula transition-colors" />
+              <Input
+                placeholder="Search the knowledge base..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="pl-12 h-16 bg-white/[0.03] border-white/10 rounded-2xl text-lg font-medium ring-nebula focus-visible:ring-1 focus-visible:border-nebula/50 transition-all placeholder:text-muted"
+                id="faq-search"
+              />
+            </div>
+            {search && (
+               <button 
+                  onClick={() => setSearch("")}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-dust hover:text-white transition-colors tracking-widest uppercase"
+               >
+                  Clear
+               </button>
+            )}
           </div>
         </div>
       </section>
 
-      {/* Category Tabs + FAQ Content */}
-      <section className="py-8 px-4 flex-1">
-        <div className="container max-w-3xl mx-auto space-y-6">
-          {/* Category Tabs */}
+      {/* ═══ Main Content ═══ */}
+      <section className="pb-32 px-6">
+        <div className="container max-w-4xl mx-auto space-y-10">
+          
+          {/* Category Navigation */}
           {!search && (
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap items-center justify-center gap-3">
               {faqCategories.map(cat => (
                 <button
                   key={cat.id}
                   onClick={() => setActiveCategory(cat.id)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${activeCategory === cat.id
-                    ? "bg-primary text-primary-foreground shadow-sm"
-                    : "bg-muted hover:bg-muted/80 text-muted-foreground"
-                    }`}
+                  className={`px-6 py-2.5 rounded-xl text-sm font-bold tracking-tight transition-all duration-300 border ${
+                    activeCategory === cat.id
+                      ? "bg-nebula border-nebula text-white shadow-lg shadow-nebula/20 scale-105"
+                      : "bg-white/[0.02] border-white/5 text-dust hover:border-white/20 hover:text-starlight"
+                  }`}
                 >
-                  {cat.emoji} {cat.label}
+                  <span className="mr-2 opacity-80">{cat.emoji}</span> {cat.label}
                 </button>
               ))}
             </div>
           )}
 
-          {/* FAQ Items */}
-          {filteredCategories.map(cat => (
-            <div key={cat.id} className="space-y-3">
-              {search && (
-                <h2 className="text-lg font-bold flex items-center gap-2">
-                  <span>{cat.emoji}</span> {cat.label}
-                </h2>
-              )}
-              {cat.faqs.map(faq => (
-                <FAQItem
-                  key={faq.q}
-                  q={faq.q}
-                  a={faq.a}
-                  isOpen={!!openItems[faq.q]}
-                  onToggle={() => toggleItem(faq.q)}
-                />
-              ))}
-              {filteredCategories.length > 0 && cat.faqs.length === 0 && search && (
-                <p className="text-muted-foreground text-sm text-center py-4">No results in this category.</p>
-              )}
-            </div>
-          ))}
+          {/* Result Content */}
+          <div className="space-y-12">
+            {filteredCategories.map((cat, idx) => (
+              <motion.div 
+                key={cat.id} 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.1 }}
+                className="space-y-4"
+              >
+                {search && (
+                  <h2 className="text-xl font-bold text-white flex items-center gap-3 pb-2 border-b border-white/5">
+                    <span className="opacity-50">{cat.emoji}</span> {cat.label}
+                  </h2>
+                )}
+                
+                <div className="grid gap-4">
+                  {cat.faqs.map(faq => (
+                    <FAQItem
+                      key={faq.q}
+                      q={faq.q}
+                      a={faq.a}
+                      isOpen={!!openItems[faq.q]}
+                      onToggle={() => toggleItem(faq.q)}
+                    />
+                  ))}
+                </div>
+              </motion.div>
+            ))}
 
-          {filteredCategories.every(c => c.faqs.length === 0) && (
-            <div className="text-center py-12 space-y-4">
-              <p className="text-muted-foreground">No results found for "{search}"</p>
-              <Button variant="outline" onClick={() => setSearch("")}>Clear Search</Button>
-            </div>
-          )}
+            {/* Empty State */}
+            {filteredCategories.every(c => c.faqs.length === 0) && (
+              <GlassCard index={0} levitate={false} tilt={false}>
+                 <div className="p-16 text-center space-y-6">
+                    <div className="inline-flex p-4 rounded-2xl bg-white/5 text-dust mb-2">
+                       <Search className="h-8 w-8" />
+                    </div>
+                    <div className="space-y-2">
+                       <h3 className="text-2xl font-bold text-white">No matches found</h3>
+                       <p className="text-dust font-medium">We couldn't find any questions matching "{search}".</p>
+                    </div>
+                    <Button variant="outline" className="border-white/10 hover:bg-white/5" onClick={() => setSearch("")}>
+                       Reset Search Filters
+                    </Button>
+                 </div>
+              </GlassCard>
+            )}
+          </div>
         </div>
       </section>
 
-      {/* Still have questions? */}
-      <section className="py-12 px-4 bg-muted/40">
-        <div className="container max-w-3xl mx-auto text-center space-y-4">
-          <h2 className="text-2xl font-bold">Still have questions?</h2>
-          <p className="text-muted-foreground">Our team typically responds within 24 hours.</p>
-          <div className="flex flex-wrap gap-3 justify-center">
-            <Button onClick={() => navigate("/contact")} className="gap-2">
-              Contact Us <ArrowRight className="h-4 w-4" />
-            </Button>
-            <Button variant="outline" onClick={() => navigate("/how-it-works")}>
-              See How It Works
-            </Button>
+      {/* ═══ Support Section ═══ */}
+      <section className="py-24 px-6 border-t border-white/5 relative bg-white/[0.01]">
+        <div className="container max-w-4xl mx-auto">
+          <div className="glass-panel p-10 md:p-14 rounded-[2rem] text-center space-y-8 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-cyan/5 blur-[80px] -z-10" />
+            <div className="absolute bottom-0 left-0 w-64 h-64 bg-nebula/5 blur-[80px] -z-10" />
+            
+            <div className="space-y-4">
+              <h2 className="text-3xl md:text-4xl font-black text-white font-jakarta">Still have questions?</h2>
+              <p className="text-lg text-dust font-medium max-w-md mx-auto">
+                Can't find what you're looking for? Reach out to our engineering team directly.
+              </p>
+            </div>
+            
+            <div className="flex flex-wrap items-center justify-center gap-4">
+              <MagneticButton onClick={() => navigate("/contact")} variant="gradient" size="lg" className="h-14 px-8 font-bold">
+                <MessageCircle className="h-5 w-5 mr-2" /> Message Support
+              </MagneticButton>
+              <MagneticButton onClick={() => navigate("/how-it-works")} variant="glass" size="lg" className="h-14 px-8 font-bold border-white/10">
+                How It Works
+              </MagneticButton>
+            </div>
+            
+            <p className="text-xs font-bold text-muted uppercase tracking-[0.2em]">Response time: ~24 hours</p>
           </div>
         </div>
       </section>

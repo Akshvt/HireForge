@@ -1,124 +1,119 @@
 import { Link } from "react-router-dom";
 import { Briefcase, Code2, Sparkles, ExternalLink, Github, Twitter, Mail } from "lucide-react";
+import { motion } from "framer-motion";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t bg-muted/30 mt-auto">
-      <div className="container max-w-5xl mx-auto px-4 py-12">
-        {/* Product Switcher */}
-        <div className="mb-10 p-4 rounded-2xl bg-card border shadow-sm">
-          <p className="text-xs text-muted-foreground text-center mb-3 font-medium uppercase tracking-wider">CodeSage Ecosystem</p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            {/* HireForge — Active */}
-            <div className="flex items-center gap-3 px-5 py-3 rounded-xl bg-primary text-primary-foreground flex-1 sm:flex-none sm:min-w-[200px]">
-              <div className="p-1.5 rounded-lg bg-primary-foreground/20">
-                <Briefcase className="h-4 w-4" />
+    <footer className="relative mt-24 pt-20 pb-10 overflow-hidden border-t border-white/5">
+      {/* Background Glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-px bg-gradient-to-r from-transparent via-nebula/30 to-transparent" />
+      
+      <div className="container max-w-6xl mx-auto px-6">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-20 animate-fade-in">
+          {/* Brand Info */}
+          <div className="md:col-span-4 space-y-6">
+            <Link to="/" className="flex items-center gap-2.5 group">
+              <div className="p-2 rounded-xl bg-gradient-to-br from-nebula to-cyan shadow-lg shadow-nebula/20 transition-transform group-hover:scale-105">
+                <Briefcase className="h-5 w-5 text-white" />
               </div>
-              <div>
-                <p className="text-sm font-bold">HireForge</p>
-                <p className="text-xs opacity-75">AI Resume Analyzer</p>
-              </div>
-              <span className="ml-auto text-xs font-medium bg-primary-foreground/20 px-2 py-0.5 rounded-full">Active</span>
+              <span className="font-jakarta font-bold text-starlight text-xl tracking-tight">HireForge</span>
+            </Link>
+            <p className="text-dust text-sm leading-relaxed max-w-xs transition-colors hover:text-starlight/80">
+              The premium, open-source AI resume ecosystem. Built for developers who want to master their career path.
+            </p>
+            <div className="flex items-center gap-4 pt-2">
+              {[
+                { Icon: Twitter, href: "https://twitter.com/codesagedev" },
+                { Icon: Github, href: "https://github.com/codesage" },
+                { Icon: Mail, href: "/contact" }
+              ].map(({ Icon, href }, i) => (
+                <Link
+                  key={i}
+                  to={href.startsWith("http") ? "#" : href}
+                  className="p-2 rounded-lg bg-white/5 hover:bg-white/10 hover:text-nebula transition-all border border-white/5"
+                  onClick={() => href.startsWith("http") && window.open(href, "_blank")}
+                >
+                  <Icon className="h-4.5 w-4.5" />
+                </Link>
+              ))}
             </div>
+          </div>
 
-            {/* CodeSage — Switch to */}
-            <a
-              href="https://codesage.dev"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-3 px-5 py-3 rounded-xl border bg-background hover:bg-accent/5 hover:border-accent/30 transition-all flex-1 sm:flex-none sm:min-w-[200px] group"
-            >
-              <div className="p-1.5 rounded-lg bg-accent/10 group-hover:bg-accent/20 transition-colors">
-                <Code2 className="h-4 w-4 text-accent" />
+          {/* Links Grid */}
+          <div className="md:col-span-8 grid grid-cols-2 sm:grid-cols-3 gap-8">
+            {[
+              {
+                title: "Product",
+                links: [
+                  { to: "/how-it-works", label: "How It Works" },
+                  { to: "/about", label: "About Us" },
+                  { to: "/faq", label: "FAQ" },
+                ],
+              },
+              {
+                title: "Resources",
+                links: [
+                  { to: "https://codesage.dev", label: "CodeSage AI", external: true },
+                  { to: "/register", label: "Get Started" },
+                  { to: "/dashboard", label: "Dashboard" },
+                ],
+              },
+              {
+                title: "Legal",
+                links: [
+                  { to: "/privacy", label: "Privacy Policy" },
+                  { to: "/terms", label: "Terms of Service" },
+                  { to: "/contact", label: "Contact Us" },
+                ],
+              },
+            ].map((section) => (
+              <div key={section.title} className="space-y-4">
+                <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-starlight/50">{section.title}</h4>
+                <ul className="space-y-2.5">
+                  {section.links.map((link) => (
+                    <li key={link.label}>
+                      {link.external ? (
+                        <a
+                          href={link.to}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm text-dust hover:text-cyan transition-colors flex items-center gap-1 group"
+                        >
+                          {link.label}
+                          <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </a>
+                      ) : (
+                        <Link to={link.to} className="text-sm text-dust hover:text-nebula transition-colors">
+                          {link.label}
+                        </Link>
+                      )}
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <div>
-                <p className="text-sm font-bold">CodeSage</p>
-                <p className="text-xs text-muted-foreground">AI Code Reviewer</p>
-              </div>
-              <ExternalLink className="ml-auto h-3.5 w-3.5 text-muted-foreground group-hover:text-accent transition-colors" />
-            </a>
-          </div>
-
-          {/* Tagline */}
-          <p className="text-center text-xs text-muted-foreground mt-4 italic">
-            "CodeSage reviews your code. HireForge reviews your career. Together, they make you unstoppable."
-          </p>
-        </div>
-
-        {/* Footer Links */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
-          <div className="space-y-3">
-            <h4 className="text-sm font-semibold">Product</h4>
-            <ul className="space-y-2">
-              <li><Link to="/how-it-works" className="text-sm text-muted-foreground hover:text-foreground transition-colors">How It Works</Link></li>
-              <li><Link to="/about" className="text-sm text-muted-foreground hover:text-foreground transition-colors">About Us</Link></li>
-              <li><Link to="/faq" className="text-sm text-muted-foreground hover:text-foreground transition-colors">FAQ</Link></li>
-            </ul>
-          </div>
-          <div className="space-y-3">
-            <h4 className="text-sm font-semibold">Account</h4>
-            <ul className="space-y-2">
-              <li><Link to="/register" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Get Started Free</Link></li>
-              <li><Link to="/login" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Sign In</Link></li>
-              <li><Link to="/dashboard" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Dashboard</Link></li>
-            </ul>
-          </div>
-          <div className="space-y-3">
-            <h4 className="text-sm font-semibold">Legal</h4>
-            <ul className="space-y-2">
-              <li><Link to="/privacy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Privacy Policy</Link></li>
-              <li><Link to="/terms" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Terms of Service</Link></li>
-              <li><Link to="/contact" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Contact Us</Link></li>
-            </ul>
-          </div>
-          <div className="space-y-3">
-            <h4 className="text-sm font-semibold">Ecosystem</h4>
-            <ul className="space-y-2">
-              <li>
-                <a href="https://codesage.dev" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-accent transition-colors flex items-center gap-1">
-                  CodeSage <ExternalLink className="h-3 w-3" />
-                </a>
-              </li>
-              <li>
-                <a href="https://github.com/codesage" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1">
-                  GitHub <ExternalLink className="h-3 w-3" />
-                </a>
-              </li>
-            </ul>
+            ))}
           </div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-6 border-t flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2 font-bold">
-            <Briefcase className="h-5 w-5 text-primary" />
-            <span>HireForge</span>
-            <span className="text-muted-foreground font-normal text-sm">· Part of the CodeSage Suite</span>
+        <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex items-center gap-2 text-xs font-medium text-dust">
+            <span>© {currentYear} HireForge</span>
+            <span className="w-1 h-1 rounded-full bg-white/10" />
+            <span className="flex items-center gap-1.5 text-aurora/80 bg-aurora/5 px-2 py-1 rounded-full border border-aurora/10">
+              <Sparkles className="h-3 w-3" />
+              Powered by CodeSage AI
+            </span>
           </div>
-
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20">
-            <Sparkles className="h-3.5 w-3.5 text-accent" />
-            <span className="text-xs font-medium text-accent">Powered by CodeSage AI</span>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <a href="https://twitter.com/codesagedev" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
-              <Twitter className="h-4 w-4" />
-            </a>
-            <a href="https://github.com/codesage" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
-              <Github className="h-4 w-4" />
-            </a>
-            <Link to="/contact" className="text-muted-foreground hover:text-foreground transition-colors">
-              <Mail className="h-4 w-4" />
-            </Link>
+          
+          <div className="flex items-center gap-6">
+             <Link to="/privacy" className="text-xs text-dust hover:text-starlight transition-colors">Privacy</Link>
+             <Link to="/terms" className="text-xs text-dust hover:text-starlight transition-colors">Terms</Link>
+             <span className="text-xs text-muted">v2.0.4-premium</span>
           </div>
         </div>
-
-        <p className="text-center text-xs text-muted-foreground mt-4">
-          © {currentYear} HireForge by CodeSage. All rights reserved. Free forever — no hidden tiers.
-        </p>
       </div>
     </footer>
   );
