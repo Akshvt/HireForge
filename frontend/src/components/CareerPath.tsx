@@ -5,20 +5,22 @@ import {
   Loader2,
   BookOpen,
   Check,
-  ChevronRight,
-  ArrowRight,
-  Zap
+  ChevronRight
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Progress } from "@/components/ui/progress";
+import { ProgressBar } from "@/components/ui/progress-bar";
 import { cn } from "@/lib/utils";
 import api from "@/services/api";
 import { toast } from "sonner";
-import GlassCard from "@/components/ui/GlassCard";
-import MagneticButton from "./ui/MagneticButton";
-import { motion, AnimatePresence } from "framer-motion";
 
 import type { ResumeData } from "@/types/resume";
 
@@ -98,270 +100,182 @@ export default function CareerPath({ resumeData }: CareerPathProps) {
   const renderPath = (path: CareerStep) => {
     const total = path.missing_skills.length;
     const completed = path.missing_skills.filter(s => progress[s]).length;
-    const progressPercent = total === 0 ? 100 : Math.round((completed / total) * 100);
 
     const resources = [
-      { key: "youtube", label: "YouTube", color: "text-red-400 group-hover:text-red-300" },
-      { key: "coursera", label: "Coursera", color: "text-blue-400 group-hover:text-blue-300" },
-      { key: "udemy", label: "Udemy", color: "text-purple-400 group-hover:text-purple-300" },
-      { key: "gfg", label: "GFG", color: "text-emerald-400 group-hover:text-emerald-300" },
-      { key: "w3schools", label: "W3", color: "text-cyan-400 group-hover:text-cyan-300" }
+      { key: "youtube", label: "YouTube", color: "text-red-500" },
+      { key: "coursera", label: "Coursera", color: "text-blue-500" },
+      { key: "udemy", label: "Udemy", color: "text-purple-500" },
+      { key: "gfg", label: "GFG", color: "text-green-500" },
+      { key: "w3schools", label: "W3", color: "text-indigo-500" }
     ] as const;
 
     return (
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="space-y-10"
-      >
-        {/* Transition Header */}
-        <div className="flex items-center justify-between p-8 rounded-[2.5rem] bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 relative overflow-hidden group">
-           <div className="absolute inset-0 bg-nebula/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-3xl" />
-           
-           <div className="relative z-10 flex flex-col md:flex-row items-center gap-8 md:gap-12 w-full">
-              <div className="text-center md:text-left space-y-1">
-                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-dust/50">Current Trajectory</p>
-                 <p className="text-xl font-black text-starlight">{path.current_role}</p>
-              </div>
-              
-              <div className="relative flex items-center justify-center p-3">
-                 <div className="absolute inset-0 bg-nebula/10 rounded-full blur-xl animate-pulse" />
-                 <ArrowRight className="h-8 w-8 text-nebula relative z-10" />
-              </div>
-
-              <div className="text-center md:text-left space-y-1">
-                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-aurora/70">Strategic Target</p>
-                 <p className="text-xl font-black text-gradient">{path.next_role}</p>
-              </div>
-
-              <div className="md:ml-auto text-center md:text-right">
-                 <div className="text-4xl font-black text-white font-space">{progressPercent}%</div>
-                 <p className="text-[10px] font-black uppercase tracking-widest text-dust/50">Readiness Score</p>
-              </div>
-           </div>
+      <div className="space-y-6 animate-fade-in">
+        <div className="flex items-center justify-center gap-3 py-4">
+          <div className="px-4 py-2 rounded-lg bg-muted text-center">
+            <p className="text-xs text-muted-foreground">Current</p>
+            <p className="font-semibold">{path.current_role}</p>
+          </div>
+          <ChevronRight className="h-6 w-6 text-accent" />
+          <div className="px-4 py-2 rounded-lg gradient-accent text-accent-foreground text-center">
+            <p className="text-xs opacity-80">Next</p>
+            <p className="font-semibold">{path.next_role}</p>
+          </div>
         </div>
 
-        {/* Progress Bar */}
-        <div className="space-y-4">
-           <div className="flex justify-between text-xs font-black uppercase tracking-widest text-dust/70">
-              <span>Path Completion</span>
-              <span className="text-nebula">{completed} / {total} Skills Verified</span>
-           </div>
-           <Progress value={progressPercent} className="h-3 bg-white/5" indicatorClassName="bg-gradient-to-r from-nebula via-cyan to-aurora" />
-        </div>
+        <ProgressBar value={completed} max={total || 1} />
 
-        {/* Skills Grid */}
-        <div className="space-y-5">
-          <h4 className="text-sm font-black uppercase tracking-[0.2em] text-dust/70 flex items-center gap-2 mb-6">
-            <BookOpen className="h-4 w-4 text-nebula" />
-            Knowledge Acquisition Pipeline
+        <div className="space-y-3">
+          <h4 className="font-semibold flex items-center gap-2">
+            <BookOpen className="h-4 w-4 text-accent" />
+            Skills to Learn ({total - completed} remaining)
           </h4>
 
           {total === 0 ? (
-            <GlassCard index={0} glowColor="aurora">
-               <div className="p-10 text-center space-y-4">
-                  <div className="w-16 h-16 rounded-full bg-aurora/10 flex items-center justify-center mx-auto mb-2 border border-aurora/20">
-                     <Check className="h-8 w-8 text-aurora" />
-                  </div>
-                  <h3 className="text-xl font-black text-white">Algorithmically Optimized</h3>
-                  <p className="text-dust font-medium max-w-sm mx-auto">
-                    Your current skill profile matches 100% of the core requirements for this strategic role.
-                  </p>
-               </div>
-            </GlassCard>
-          ) : (
-            <div className="grid gap-4">
-               <AnimatePresence>
-                  {path.missing_skills.map((skill, idx) => (
-                    <motion.div
-                      key={skill}
-                      layout
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: idx * 0.05 }}
-                    >
-                       <div
-                         className={cn(
-                           "group p-6 rounded-2xl border transition-all duration-300",
-                           progress[skill]
-                             ? "bg-aurora/5 border-aurora/20 shadow-[0_0_20px_rgba(16,185,129,0.05)]"
-                             : "bg-white/[0.02] border-white/5 hover:bg-white/[0.04] hover:border-white/10"
-                         )}
-                       >
-                         <div className="flex items-center gap-5">
-                           <div className="relative flex items-center justify-center">
-                              <Checkbox
-                                checked={!!progress[skill]}
-                                onCheckedChange={() => toggleSkill(skill)}
-                                className={cn(
-                                  "h-6 w-6 rounded-lg border-white/20 transition-all",
-                                  progress[skill] ? "bg-aurora border-aurora" : "bg-white/5"
-                                )}
-                              />
-                           </div>
-                           <div className="flex-1">
-                              <span
-                                className={cn(
-                                  "text-lg font-bold transition-all duration-300",
-                                  progress[skill] ? "text-starlight/40 line-through" : "text-starlight group-hover:text-white"
-                                )}
-                              >
-                                {skill}
-                              </span>
-                           </div>
-                           
-                           {!progress[skill] && (
-                             <div className="hidden md:flex items-center gap-3">
-                                {resources.map(r =>
-                                  path.learning_resources[skill]?.[r.key] ? (
-                                    <a
-                                      key={r.key}
-                                      href={path.learning_resources[skill][r.key]}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="p-2 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/20 transition-all group/link"
-                                      title={`Learn on ${r.label}`}
-                                    >
-                                      <ExternalLink className={cn("h-4 w-4", r.color)} />
-                                    </a>
-                                  ) : null
-                                )}
-                             </div>
-                           )}
-                         </div>
-
-                         {!progress[skill] && path.learning_resources?.[skill] && (
-                           <motion.div 
-                             initial={{ opacity: 0, height: 0 }}
-                             animate={{ opacity: 1, height: "auto" }}
-                             className="mt-4 pt-4 border-t border-white/5 flex flex-wrap gap-2"
-                           >
-                             <div className="md:hidden flex flex-wrap gap-2 w-full">
-                                {resources.map(r =>
-                                  path.learning_resources[skill]?.[r.key] ? (
-                                    <a
-                                      key={r.key}
-                                      href={path.learning_resources[skill][r.key]}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className={cn(
-                                        "inline-flex items-center gap-2 text-[10px] px-3 py-1.5 rounded-xl bg-white/5 border border-white/5 font-black uppercase tracking-wider",
-                                        r.color
-                                      )}
-                                    >
-                                      {r.label}
-                                      <ExternalLink className="h-2 w-2" />
-                                    </a>
-                                  ) : null
-                                )}
-                             </div>
-                           </motion.div>
-                         )}
-                       </div>
-                    </motion.div>
-                  ))}
-               </AnimatePresence>
+            <div className="p-4 rounded-lg bg-success/10 border text-center">
+              <Check className="h-8 w-8 text-success mx-auto mb-2" />
+              <p className="font-semibold text-success">
+                You already match this role 🎉
+              </p>
             </div>
+          ) : (
+            path.missing_skills.map(skill => (
+              <div
+                key={skill}
+                className={cn(
+                  "p-4 rounded-lg border",
+                  progress[skill]
+                    ? "bg-success/5 border-success/20"
+                    : "bg-card hover:bg-muted/50"
+                )}
+              >
+                <div className="flex items-center gap-3">
+                  <Checkbox
+                    checked={!!progress[skill]}
+                    onCheckedChange={() => toggleSkill(skill)}
+                  />
+                  <span
+                    className={cn(
+                      "font-medium",
+                      progress[skill] && "line-through text-muted-foreground"
+                    )}
+                  >
+                    {skill}
+                  </span>
+                </div>
+
+                {!progress[skill] && path.learning_resources?.[skill] && (
+                  <div className="mt-3 flex flex-wrap gap-2 pl-7">
+                    {resources.map(r =>
+                      path.learning_resources[skill]?.[r.key] ? (
+                        <a
+                          key={r.key}
+                          href={path.learning_resources[skill][r.key]}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={cn(
+                            "inline-flex items-center gap-1 text-xs px-2 py-1 rounded-md bg-muted",
+                            r.color
+                          )}
+                        >
+                          {r.label}
+                          <ExternalLink className="h-2.5 w-2.5" />
+                        </a>
+                      ) : null
+                    )}
+                  </div>
+                )}
+              </div>
+            ))
           )}
         </div>
-      </motion.div>
+      </div>
     );
   };
 
   /* ---------- UI ---------- */
   return (
-    <GlassCard index={0} className="overflow-hidden">
-      <div className="p-8 md:p-10 space-y-10">
-        
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-           <div className="space-y-2">
-              <div className="flex items-center gap-3">
-                 <div className="p-2.5 rounded-xl bg-cyan/10 text-cyan border border-cyan/20">
-                    <TrendingUp className="h-6 w-6" />
-                 </div>
-                 <h2 className="text-2xl font-black text-white font-jakarta tracking-tight">Career Compass</h2>
-              </div>
-              <p className="text-dust font-medium">Algorithmic roadmap for professional advancement.</p>
-           </div>
-           
-           {!data && (
-              <MagneticButton
-                onClick={fetchCareer}
-                disabled={loading}
-                variant="gradient"
-                size="lg"
-                className="h-14 px-10 font-bold"
-              >
-                {loading ? (
-                  <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> Analyzing Trajectories...</>
-                ) : (
-                  <><Zap className="mr-2 h-5 w-5" /> Generate Roadmap</>
-                )}
-              </MagneticButton>
-           )}
+    <Card className="overflow-hidden border-0 shadow-lg">
+      <CardHeader className="gradient-primary text-primary-foreground pb-8">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 rounded-xl bg-primary-foreground/10">
+            <TrendingUp className="h-6 w-6" />
+          </div>
+          <div>
+            <CardTitle className="text-xl">Career Path</CardTitle>
+            <CardDescription className="text-primary-foreground/70">
+              Your personalized roadmap to career growth
+            </CardDescription>
+          </div>
         </div>
+      </CardHeader>
 
+      <CardContent className="pt-6">
         {error && (
-          <div className="text-nova text-sm bg-nova/5 p-4 rounded-2xl border border-nova/10 flex items-center gap-3">
-             <TrendingUp className="h-4 w-4" />
-             {error}
+          <div className="mb-4 text-sm text-destructive bg-destructive/10 p-3 rounded-lg">
+            {error}
           </div>
         )}
 
         {!data ? (
-          <div className="py-20 text-center space-y-6 bg-white/[0.02] border border-dashed border-white/10 rounded-[2rem]">
-            <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mx-auto">
-               <TrendingUp className="h-8 w-8 text-dust/30" />
-            </div>
-            <p className="text-dust font-medium max-w-sm mx-auto">
-              Unlock personalized career paths and learning resources based on your current expertise and industry trends.
-            </p>
+          <div className="text-center py-8">
+            <Button
+              onClick={fetchCareer}
+              disabled={loading}
+              className="gradient-accent text-accent-foreground"
+              size="lg"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Analyzing...
+                </>
+              ) : (
+                <>
+                  <TrendingUp className="mr-2 h-4 w-4" />
+                  Get Career Path
+                </>
+              )}
+            </Button>
           </div>
         ) : (
-          <div className="space-y-10">
-            {/* Nav Tabs */}
-            <div className="flex flex-wrap gap-2 p-1.5 rounded-2xl bg-white/[0.03] border border-white/5 w-fit">
-              {[
-                { id: "PRIMARY", label: "Optimized Path" },
-                { id: "TECH", label: "Tech Specialization" },
-                { id: "NONTECH", label: "Leadership Orbit" }
-              ].map(f => (
-                <button
-                  key={f.id}
-                  onClick={() => setView(f.id as ViewMode)}
-                  className={cn(
-                    "px-5 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all duration-300",
-                    view === f.id 
-                      ? "bg-nebula text-white shadow-[0_0_20px_rgba(109,40,217,0.3)]" 
-                      : "text-dust/60 hover:text-dust hover:bg-white/5"
-                  )}
-                >
-                  {f.label}
-                </button>
-              ))}
+          <>
+            <div className="flex gap-2 mb-6">
+              <Button
+                size="sm"
+                onClick={() => setView("PRIMARY")}
+                className={cn(view === "PRIMARY" && "gradient-accent")}
+              >
+                Best Path
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => setView("TECH")}
+              >
+                Tech Paths
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => setView("NONTECH")}
+              >
+                Non-Tech Paths
+              </Button>
             </div>
 
-            <div className="pt-2">
-               {view === "PRIMARY" && renderPath(data.primary_path)}
-               {view === "TECH" &&
-                 <div className="grid gap-12">
-                   {data.tech_paths.map((p, i) => (
-                     <div key={i}>{renderPath(p)}</div>
-                   ))}
-                 </div>
-               }
-               {view === "NONTECH" &&
-                 <div className="grid gap-12">
-                   {data.non_tech_paths.map((p, i) => (
-                     <div key={i}>{renderPath(p)}</div>
-                   ))}
-                 </div>
-               }
-            </div>
-          </div>
+            {view === "PRIMARY" && renderPath(data.primary_path)}
+            {view === "TECH" &&
+              data.tech_paths.map((p, i) => (
+                <div key={i}>{renderPath(p)}</div>
+              ))}
+            {view === "NONTECH" &&
+              data.non_tech_paths.map((p, i) => (
+                <div key={i}>{renderPath(p)}</div>
+              ))}
+          </>
         )}
-      </div>
-    </GlassCard>
+      </CardContent>
+    </Card>
   );
 }
