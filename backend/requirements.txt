@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+python-multipart
+pdfminer.six
+python-docx
+scikit-learn
+pandas
+numpy
+sentence-transformers
+transformers 
+torch 
+sentencepiece 
+reportlab

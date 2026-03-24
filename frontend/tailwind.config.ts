@@ -14,6 +14,11 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        space: ['"Space Grotesk"', '"Plus Jakarta Sans"', 'sans-serif'],
+        jakarta: ['"Plus Jakarta Sans"', '"Inter"', 'sans-serif'],
+        'mono-jb': ['"JetBrains Mono"', '"Fira Code"', 'monospace'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -66,6 +71,14 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // Deep Space Holographic tokens
+        nebula: "#6366F1",
+        aurora: "#10B981",
+        cyan: "#06B6D4",
+        nova: "#F43F5E",
+        dust: "#94A3B8",
+        starlight: "#F8FAFC",
+        void: "#030305",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -81,10 +94,20 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        levitate: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-4px)" },
+        },
+        "shimmer-sweep": {
+          "0%": { transform: "translateX(-100%)" },
+          "100%": { transform: "translateX(100%)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        levitate: "levitate 4s ease-in-out infinite",
+        "shimmer-sweep": "shimmer-sweep 3s ease-in-out infinite",
       },
     },
   },

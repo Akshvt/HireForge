@@ -1,0 +1,19 @@
+title,description,skills,market_demand,date_posted
+Software Engineer,Develop scalable software applications and services,"python,java,sql,git",high,2026-01-13
+Software Engineer Intern,Assist in software development and testing,"python,git,sql",high,2026-01-12
+Backend Developer,Develop REST APIs using Python and Flask,"python,flask,sql,docker",high,2026-01-11
+Backend Developer Intern,Assist backend team with API development,"python,flask,sql",high,2026-01-10
+Machine Learning Engineer,Build ML models and pipelines,"python,machine learning,deep learning",high,2026-01-09
+Machine Learning Intern,Support ML model training and evaluation,"python,machine learning",high,2026-01-08
+Data Analyst,Analyze data and build dashboards,"python,sql,excel",medium,2026-01-07
+Data Analyst Intern,Assist in data cleaning and reporting,"excel,sql,python",medium,2026-01-13
+Frontend Developer,Develop UI using React,"react,javascript,css",medium,2026-01-12
+Frontend Developer Intern,Assist in frontend development,"react,javascript,css",medium,2026-01-11
+DevOps Engineer,Manage CI/CD pipelines and cloud infrastructure,"docker,kubernetes,aws",high,2026-01-10
+DevOps Intern,Support deployment and monitoring tasks,"docker,linux,aws",high,2026-01-09
+QA Engineer,Test software applications and automate tests,"selenium,python,testing",medium,2026-01-08
+QA Intern,Assist in manual and automation testing,"selenium,testing",medium,2026-01-07
+Business Analyst,Work with stakeholders to analyze business requirements,"excel,sql,communication",medium,2026-01-13
+Product Analyst,Analyze product metrics and user behavior,"sql,excel,analytics",medium,2026-01-12
+Operations Executive,Coordinate operations and reporting,"excel,communication,documentation",medium,2026-01-11
+HR Executive,Manage recruitment and employee relations,"communication,recruitment,documentation",medium,2026-01-10
