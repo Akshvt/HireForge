@@ -19,8 +19,16 @@ dotenv.config();
 
 const app = express();
 
-// Connect to Database
-connectDB();
+// Ensure Database is connected before handling requests
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    console.error("Database connection failed", err);
+    res.status(500).json({ message: "Internal Server Error: Database connection failed" });
+  }
+});
 
 // Middleware
 app.use(express.json());
