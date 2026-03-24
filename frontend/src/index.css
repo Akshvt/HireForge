@@ -134,7 +134,7 @@
 
 @layer base {
   * {
-    @apply border-white/5;
+    @apply border-border;
     outline-color: var(--nebula);
   }
 
@@ -442,15 +442,15 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #09090b;
+  background: hsl(var(--background));
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: hsl(var(--muted-foreground) / 0.2);
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid hsl(var(--border));
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: hsl(var(--muted-foreground) / 0.35);
 }

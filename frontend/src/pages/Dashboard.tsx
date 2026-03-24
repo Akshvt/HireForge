@@ -150,9 +150,9 @@ const Dashboard = () => {
             </div>
             
             <div className="flex items-center gap-3">
-              <div className="px-4 py-2 rounded-xl bg-white/[0.03] border border-white/5 flex items-center gap-2">
+              <div className="px-4 py-2 rounded-xl bg-secondary/50 dark:bg-white/[0.03] border border-border dark:border-white/5 flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-aurora animate-pulse" />
-                <span className="text-xs font-bold uppercase tracking-widest text-starlight/70">Engine Status: Optimal</span>
+                <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Engine Status: Optimal</span>
               </div>
             </div>
           </motion.div>
@@ -191,7 +191,7 @@ const Dashboard = () => {
                 <Tabs defaultValue="ats" className="w-full">
                   <div className="flex items-center justify-between mb-6">
                      <h2 className="text-xl font-bold text-starlight font-jakarta">Intelligence Suite</h2>
-                     <TabsList className="bg-white/[0.03] border border-white/5 rounded-2xl p-1.5 h-auto">
+                     <TabsList className="bg-secondary/50 dark:bg-white/[0.03] border border-border dark:border-white/5 rounded-2xl p-1.5 h-auto">
                         {[
                           { value: "ats", label: "Analysis" },
                           { value: "jd", label: "Targeting" },
@@ -201,7 +201,7 @@ const Dashboard = () => {
                           <TabsTrigger
                             key={tab.value}
                             value={tab.value}
-                            className="rounded-xl px-5 py-2 text-sm font-bold text-dust data-[state=active]:bg-nebula data-[state=active]:text-starlight data-[state=active]:shadow-xl data-[state=active]:shadow-nebula/20 transition-all"
+                            className="rounded-xl px-5 py-2 text-sm font-bold text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-xl data-[state=active]:shadow-primary/20 transition-all"
                           >
                             {tab.label}
                           </TabsTrigger>
