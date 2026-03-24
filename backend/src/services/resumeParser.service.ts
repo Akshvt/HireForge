@@ -1,11 +1,9 @@
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
+import { PDFParse } from 'pdf-parse';
 import mammoth from 'mammoth';
 
 export const parseResume = async (fileBuffer: Buffer, mimeType: string): Promise<string> => {
     try {
         if (mimeType === 'application/pdf') {
-            const { PDFParse } = require('pdf-parse');
             const parser = new PDFParse({ data: fileBuffer });
             const result = await parser.getText();
             return result.text;
