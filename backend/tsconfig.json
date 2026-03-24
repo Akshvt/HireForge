@@ -27,5 +27,6 @@
     "esm": true,
     "experimentalSpecifierResolution": "node"
   },
+  "include": ["src/**/*"],
   "exclude": ["test-ai.ts"]
 }

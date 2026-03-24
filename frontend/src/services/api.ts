@@ -1,7 +1,7 @@
 import { useAuthStore } from '../store/authStore';
 
 // Mock API service - replace with your actual backend URL
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || '';
 
 interface RequestOptions {
   headers?: Record<string, string>;

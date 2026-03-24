@@ -1,5 +1,5 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import { Document, Packer, Paragraph, TextRun, HeadingLevel, ExternalHyperlink, AlignmentType, TabStopType, TabStopPosition } from 'docx';
+import { Document, Packer, Paragraph, TextRun, HeadingLevel, ExternalHyperlink, AlignmentType, TabStopType } from 'docx';
 import { generateResumePdfFromMarkdown } from './pdfExport.service.js';
 
 const genAI = new GoogleGenerativeAI(process.env['GEMINI_API_KEY'] || '');

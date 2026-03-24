@@ -1,20 +1,6 @@
 import multer from 'multer';
-import fs from 'fs';
 
-// Ensure uploads directory exists
-const uploadDir = 'uploads/';
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-const storage = multer.diskStorage({
-    destination: (_req, _file, cb) => {
-        cb(null, uploadDir);
-    },
-    filename: (_req, file, cb) => {
-        cb(null, `${Date.now()}-${file.originalname}`);
-    }
-});
+const storage = multer.memoryStorage();
 
 const fileFilter = (_req: any, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
     const allowedMimeTypes = [

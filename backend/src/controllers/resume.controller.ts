@@ -18,11 +18,11 @@ export const uploadResume = async (req: AuthRequest, res: Response): Promise<voi
             return;
         }
 
-        const filePath = req.file.path;
+        const fileBuffer = req.file.buffer;
         const mimeType = req.file.mimetype;
 
         // Parse the resume
-        const parsedText = await parseResume(filePath, mimeType);
+        const parsedText = await parseResume(fileBuffer, mimeType);
 
         // Calculate ATS Score and Extract Skills
         const evaluation = await evaluateResume(parsedText);

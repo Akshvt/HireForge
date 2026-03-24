@@ -1,0 +1,10 @@
+{
+  "name": "hireforge-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "install:all": "npm install --prefix frontend && npm install --prefix backend",
+    "build": "npm run build --prefix frontend && npm run build --prefix backend",
+    "dev": "npm run dev --prefix frontend && npm run dev --prefix backend"
+  }
+}

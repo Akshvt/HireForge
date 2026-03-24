@@ -184,11 +184,13 @@ export default function ResumeRewrite() {
                     {(Object.entries(TONE_DESCRIPTIONS) as [Tone, typeof TONE_DESCRIPTIONS[Tone]][]).map(
                       ([key, { label, desc, emoji }]) => (
                         <SelectItem key={key} value={key}>
-                          <span className="flex items-center gap-2">
-                            <span>{emoji}</span>
-                            <span className="font-medium">{label}</span>
-                            <span className="text-xs text-muted-foreground hidden sm:inline">— {desc}</span>
-                          </span>
+                          <div className="flex items-center gap-2 text-left max-w-full truncate">
+                            <span className="shrink-0">{emoji}</span>
+                            <span className="font-medium shrink-0">{label}</span>
+                            <span className="text-xs text-muted-foreground hidden sm:inline truncate">
+                              — {desc}
+                            </span>
+                          </div>
                         </SelectItem>
                       )
                     )}
