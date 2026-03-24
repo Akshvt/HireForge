@@ -41,7 +41,7 @@ const api: ApiService = {
     });
 
     if (!response.ok) {
-      if (response.status === 401) {
+      if (response.status === 401 && !endpoint.includes('/auth/login')) {
         useAuthStore.getState().clearAuth();
         window.location.href = '/login';
       }
@@ -79,7 +79,7 @@ const api: ApiService = {
     });
 
     if (!response.ok) {
-      if (response.status === 401) {
+      if (response.status === 401 && !endpoint.includes('/auth/login')) {
         useAuthStore.getState().clearAuth();
         window.location.href = '/login';
       }
@@ -120,7 +120,7 @@ const api: ApiService = {
     });
 
     if (!response.ok) {
-      if (response.status === 401) {
+      if (response.status === 401 && !endpoint.includes('/auth/login')) {
         useAuthStore.getState().clearAuth();
         window.location.href = '/login';
       }
@@ -154,7 +154,7 @@ const api: ApiService = {
     });
 
     if (!response.ok) {
-      if (response.status === 401) {
+      if (response.status === 401 && !endpoint.includes('/auth/login')) {
         useAuthStore.getState().clearAuth();
         window.location.href = '/login';
       }
