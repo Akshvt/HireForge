@@ -20,7 +20,7 @@ dotenv.config();
 const app = express();
 
 // Ensure Database is connected before handling requests
-app.use(async (req, res, next) => {
+app.use(async (_req, res, next) => {
   try {
     await connectDB();
     next();
