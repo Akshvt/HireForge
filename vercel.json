@@ -5,7 +5,8 @@
   "outputDirectory": "frontend/dist",
   "functions": {
     "api/index.js": {
-      "includeFiles": "backend/dist/**"
+      "includeFiles": "backend/{dist,node_modules}/**",
+      "maxDuration": 30
     }
   },
   "rewrites": [
