@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dist/server.js",
     "dev": "tsx watch src/server.ts",
-    "build": "npx tsc",
+    "build": "npx -p typescript tsc",
     "seed:jobs": "tsx src/utils/seedJobs.ts"
   },
   "keywords": [],
