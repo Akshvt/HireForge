@@ -1,4 +1,5 @@
 import Job from '../models/Job.js';
+import fs from 'fs';
 
 export interface JobRecommendation {
     jobId: string;
@@ -11,8 +12,13 @@ export interface JobRecommendation {
 
 export const matchJobs = async (userSkills: string[], desiredRole: string): Promise<JobRecommendation[]> => {
     try {
+        const logMsg = `[${new Date().toISOString()}] MatchJobs called with skills: ${userSkills.join(', ')} | Role: ${desiredRole}\n`;
+        fs.appendFileSync('match_debug.log', logMsg);
+        
         // Normalize user skills
         const normalizedUserSkills = userSkills.map(s => s.toLowerCase());
+        console.log('Matching jobs for skills:', normalizedUserSkills);
+        console.log('Desired role:', desiredRole);
 
         // 1. Fetch relevant jobs from MongoDB
         // We look for jobs that have at least one overlapping skill OR match the desired role
@@ -32,13 +38,16 @@ export const matchJobs = async (userSkills: string[], desiredRole: string): Prom
             ];
         }
 
+        console.log('Generated MongoDB query:', JSON.stringify(query));
+
         const jobs = await Job.find(query).limit(50);
+        console.log(`Found ${jobs.length} potential job matches in DB`);
 
         const recommendations: JobRecommendation[] = [];
 
         for (const job of jobs) {
             // Calculate skill overlap
-            const matchingSkills = job.skills.filter(skill =>
+            const matchingSkills = job.skills.filter((skill: string) =>
                 normalizedUserSkills.includes(skill.toLowerCase())
             );
 
@@ -56,6 +65,8 @@ export const matchJobs = async (userSkills: string[], desiredRole: string): Prom
             // Cap at 100
             matchScore = Math.min(100, matchScore);
 
+            console.log(`Job: ${job.title}, Matching Skills: ${matchingSkills.join(', ')}, Score: ${matchScore}`);
+
             // Only recommend if there's at least some match or it's a role match
             if (matchScore > 10) {
                 recommendations.push({
@@ -69,6 +80,7 @@ export const matchJobs = async (userSkills: string[], desiredRole: string): Prom
             }
         }
 
+        console.log(`Returning ${recommendations.length} recommendations after filtering`);
         // Sort by highest match score
         return recommendations.sort((a, b) => b.matchScore - a.matchScore);
     } catch (error) {
