@@ -21,14 +21,18 @@ export const matchJobs = async (userSkills: string[], desiredRole: string): Prom
             query.skills = { $in: normalizedUserSkills };
         }
 
-        if (desiredRole) {
+        if (desiredRole === 'INTERNSHIP') {
+            query.title = { $regex: 'intern', $options: 'i' };
+        } else if (desiredRole === 'FRESHER') {
+            query.title = { $not: { $regex: 'intern', $options: 'i' } };
+        } else if (desiredRole) {
             query.$or = [
                 { title: { $regex: desiredRole, $options: 'i' } },
                 { description: { $regex: desiredRole, $options: 'i' } }
             ];
         }
 
-        const jobs = await Job.find(query).limit(20);
+        const jobs = await Job.find(query).limit(50);
 
         const recommendations: JobRecommendation[] = [];
 
