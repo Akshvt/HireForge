@@ -1,19 +1,41 @@
 title,description,skills,market_demand,date_posted
-Software Engineer,Develop scalable software applications and services,"python,java,sql,git",high,2026-01-13
-Software Engineer Intern,Assist in software development and testing,"python,git,sql",high,2026-01-12
-Backend Developer,Develop REST APIs using Python and Flask,"python,flask,sql,docker",high,2026-01-11
-Backend Developer Intern,Assist backend team with API development,"python,flask,sql",high,2026-01-10
-Machine Learning Engineer,Build ML models and pipelines,"python,machine learning,deep learning",high,2026-01-09
-Machine Learning Intern,Support ML model training and evaluation,"python,machine learning",high,2026-01-08
-Data Analyst,Analyze data and build dashboards,"python,sql,excel",medium,2026-01-07
-Data Analyst Intern,Assist in data cleaning and reporting,"excel,sql,python",medium,2026-01-13
-Frontend Developer,Develop UI using React,"react,javascript,css",medium,2026-01-12
-Frontend Developer Intern,Assist in frontend development,"react,javascript,css",medium,2026-01-11
-DevOps Engineer,Manage CI/CD pipelines and cloud infrastructure,"docker,kubernetes,aws",high,2026-01-10
-DevOps Intern,Support deployment and monitoring tasks,"docker,linux,aws",high,2026-01-09
-QA Engineer,Test software applications and automate tests,"selenium,python,testing",medium,2026-01-08
-QA Intern,Assist in manual and automation testing,"selenium,testing",medium,2026-01-07
-Business Analyst,Work with stakeholders to analyze business requirements,"excel,sql,communication",medium,2026-01-13
-Product Analyst,Analyze product metrics and user behavior,"sql,excel,analytics",medium,2026-01-12
-Operations Executive,Coordinate operations and reporting,"excel,communication,documentation",medium,2026-01-11
-HR Executive,Manage recruitment and employee relations,"communication,recruitment,documentation",medium,2026-01-10
+Software Engineer,Develop and maintain scalable web applications across the stack.,"javascript,typescript,react,node.js,mongodb,git",high,2026-03-20
+Full Stack Developer,Build end-to-end features for a high-traffic fintech platform.,"react,node.js,express,postgresql,docker,aws",high,2026-03-21
+Data Analyst,Extract insights from large datasets using SQL and Python.,"python,sql,tableau,excel,statistics",medium,2026-03-22
+AI ML Intern,Develop and train machine learning models for computer vision tasks.,"python,tensorflow,pytorch,opencv,scikit-learn",high,2026-03-23
+Product Manager,Define product strategy and roadmap for mobile applications.,"agile,scrum,jira,product strategy,leadership",medium,2026-03-24
+Backend Engineer,Design and optimize RESTful APIs and database schemas.,"node.js,python,fastapi,mongodb,redis,sql",high,2026-03-25
+Frontend Developer,Create high-performance user interfaces with React and Tailwind CSS.,"react,tailwind css,javascript,html,css,framer motion",medium,2026-03-26
+DevOps Engineer,Automate CI/CD pipelines and manage cloud infrastructure.,"docker,kubernetes,jenkins,aws,terraform,linux",high,2026-03-19
+UI/UX Designer,Design intuitive user experiences and beautiful interfaces.,"figma,adobe xd,user research,prototyping,ui design",medium,2026-03-18
+Cloud Engineer,Architect and deploy scalable solutions on AWS and Azure.,"aws,azure,cloud architecture,serverless,python",high,2026-03-17
+Cyber Security Analyst,Monitor and secure network infrastructure against threats.,"network security,penetration testing,linux,wireshark,siem",high,2026-03-16
+Data Scientist,Build predictive models and perform complex data analysis.,"python,r,pandas,numpy,machine learning,statistics",high,2026-03-15
+Mobile App Developer,Develop cross-platform mobile apps using Flutter.,"flutter,dart,firebase,mobile development,git",medium,2026-03-14
+Software Architect,Design high-level structure of complex software systems.,"system design,microservices,cloud architecture,leadership",high,2026-03-13
+QA Automation Engineer,Develop automated test suites for web and mobile apps.,"selenium,cypress,javascript,testing,qa automation",medium,2026-03-12
+Data Engineer,Build and maintain scalable data pipelines.,"python,spark,hadoop,sql,airflow,data warehousing",high,2026-03-11
+Technical Product Manager,Bridge the gap between business requirements and technical execution.,"product management,agile,system design,leadership,jira",medium,2026-03-10
+AI Research Scientist,Research and develop novel artificial intelligence algorithms.,"python,pytorch,deep learning,nlp,mathematics",high,2026-03-09
+Systems Administrator,Manage and support server infrastructure and networks.,"linux,windows server,networking,bash,scripting",medium,2026-03-08
+JavaScript Developer,Write high-quality JavaScript code for client-side applications.,"javascript,es6,react,redux,web-vitals",medium,2026-03-07
+Blockchain Developer,Develop smart contracts and decentralized applications.,"solidity,ethereum,blockchain,javascript,web3.js",high,2026-03-06
+Embedded Systems Engineer,Develop software for hardware devices and microcontrollers.,"c,c++,embedded systems,rtos,microcontrollers",high,2026-03-05
+Network Engineer,Design and implement enterprise-grade network solutions.,"cisco,networking,firewalls,routing,switching",medium,2026-03-04
+Business Intelligence Developer,Transform raw data into meaningful business insights.,"sql,powerbi,tableau,data modeling,etl",medium,2026-03-03
+Java Developer,Develop enterprise-level applications using Java and Spring Boot.,"java,spring boot,hibernate,sql,maven",high,2026-03-02
+Python Developer,Build robust backend services and automation scripts.,"python,django,flask,sql,rest api",high,2026-03-01
+PHP Developer,Maintain and enhance legacy PHP applications.,"php,laravel,mysql,javascript,html",medium,2026-02-28
+Game Developer,Create immersive games using Unity and C#.,"c#,unity,game design,3d modeling,graphics",medium,2026-02-27
+SRE Engineer,Ensure reliability and performance of production services.,"linux,python,monitoring,incident management,terraform",high,2026-02-26
+Growth Product Manager,Optimize user acquisition and retention metrics.,"product management,analytics,a/b testing,marketing",medium,2026-02-25
+Machine Learning Intern,Assist in data preprocessing and model evaluation.,"python,pandas,scikit-learn,jupyter",medium,2026-02-24
+Fullstack Intern,Support development of new features across the stack.,"javascript,react,node.js,css,html",medium,2026-02-23
+Data Analyst Intern,Build reports and dashboards for business teams.,"sql,excel,tableau,communication",medium,2026-02-22
+Product Design Intern,Support UI/UX design tasks and user research.,"figma,ui design,ux research,collaboration",medium,2026-02-21
+Cloud Architect,Design and implement global cloud infrastructure strategies.,"aws,google cloud,azure,terraform,system design",high,2026-02-20
+NLP Engineer,Build and deploy natural language processing models.,"python,nlp,transformers,spacy,langchain",high,2026-02-19
+Big Data Engineer,Manage large-scale data processing systems.,"hadoop,spark,kafka,scala,distributed systems",high,2026-02-18
+Security Engineer,Implement security controls and perform vulnerability assessments.,"security,owasp,encryption,authentication,linux",high,2026-02-17
+Solutions Architect,Translate business requirements into technical architectures.,"system design,cloud,integration,presales,leadership",high,2026-02-16
+Technical Writer,Create clear and concise technical documentation.,"writing,documentation,api,software development",low,2026-02-15
